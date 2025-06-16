@@ -17,6 +17,8 @@ Rails.application.routes.draw do
     end
   end
 
+  # trial
+
   # Web routes using TurboDeviseController
   devise_for :users, controllers: { sessions: 'sessions', registrations: 'registrations' }
   
