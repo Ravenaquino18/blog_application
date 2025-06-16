@@ -1,0 +1,17 @@
+<%= form_with(model: credit_card, local: false) do |f| %>
+  <div>
+    <%= f.label :name, "Name on Card" %>
+    <%= f.text_field :name %>
+  </div>
+  <div>
+    <%= f.label :number, "Card Number" %>
+    <%= f.text_field :number %>
+  </div>
+  <div>
+    <%= f.label :expiry, "Expiry" %>
+    <%= f.text_field :expiry, placeholder: "MM/YY" %>
+  </div>
+  <div>
+    <%= f.submit %>
+  </div>
+<% end %>

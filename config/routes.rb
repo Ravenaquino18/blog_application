@@ -1,18 +1,32 @@
 Rails.application.routes.draw do
+  resources :tickets
+  get "user/profile"
+  # API routes
+  scope '/api', defaults: { format: :json } do
+    scope '/v1' do
+      devise_for :users, 
+        path_names: { sign_in: 'login', sign_out: 'logout' },
+        controllers: { registrations: 'registrations', sessions: 'sessions' },
+        as: :api_v1
+
+      devise_scope :user do
+        get 'users/current', to: 'sessions#show'
+      end
+
+      resources :pages, only: %i[index]
+    end
+  end
+
+  # Web routes using TurboDeviseController
+  devise_for :users, controllers: { sessions: 'sessions', registrations: 'registrations' }
+  
+  get '/u/:id', to: 'users#profile', as: 'user'
+
   resources :posts
+  resources :credit_cards, except: [:show, :new]
 
   get "about", to: "pages#about"
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
 
-  # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
-  # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
-  # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
-
-  # Defines the root path route ("/")
   root "pages#home"
-  # root "posts#index"
 end

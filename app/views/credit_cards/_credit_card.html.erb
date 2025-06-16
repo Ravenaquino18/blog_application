@@ -1,0 +1,5 @@
+<div id="<%= dom_id(credit_card) %>">
+  <strong>Card:</strong> **** **** **** <%= credit_card.last4 %> | <%= credit_card.name %>
+  <%= link_to "Edit", edit_credit_card_path(credit_card), data: { turbo_frame: "credit_card_form" } %>
+  <%= link_to "Delete", credit_card_path(credit_card), method: :delete, data: { turbo_confirm: "Are you sure?" } %>
+</div>

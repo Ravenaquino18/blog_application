@@ -1,0 +1,68 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm py-2">
+  <div class="container-fluid">
+    <%= link_to "🚀 MyDashboard", root_path, class: "navbar-brand fw-bold text-gradient fs-2" %>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <%= link_to "Home", root_path, class: "nav-link" %>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="postsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-file-earmark-text me-1"></i> Posts
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="postsDropdown">
+            <li><%= link_to "All Posts", posts_path, class: "dropdown-item" %></li>
+            <li><%= link_to "New Post", new_post_path, class: "dropdown-item" %></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <%= link_to "About", about_path, class: "nav-link" %>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="supportDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-life-preserver me-1"></i> Support
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="supportDropdown">
+            <li><%= link_to "Tickets", tickets_path, class: "dropdown-item" %></li>
+            <li><%= link_to "Credit Cards", credit_cards_path, class: "dropdown-item" %></li>
+          </ul>
+        </li>
+      </ul>
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
+        <% if user_signed_in? %>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarUserDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-person-circle me-1 fs-5"></i>
+              <span class="fw-semibold"><%= current_user.email %></span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarUserDropdown">
+              <li><%= link_to "Profile", user_path(current_user), class: "dropdown-item" %></li>
+              <li><%= link_to "Logout", destroy_user_session_path, method: :delete, class: "dropdown-item text-danger" %></li>
+            </ul>
+          </li>
+        <% else %>
+          <li class="nav-item">
+            <%= link_to "Login", new_user_session_path, class: "btn btn-outline-primary ms-2 px-4" %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<style>
+  .text-gradient {
+    background: linear-gradient(90deg, #0d6efd 0%, #6610f2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+  }
+</style>
+
+<h1><%= @user.email %></h1>
+<h6><%= pluralize(@users.views, "view") %></h6>
+<p>Find me in app/views/user/profile.html.erb</p>
