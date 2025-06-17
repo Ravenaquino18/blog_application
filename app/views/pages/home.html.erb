@@ -21,7 +21,7 @@
       <div class="card shadow-sm border-0">
         <div class="card-body text-center">
           <i class="bi bi-file-earmark-text display-4 text-success mb-2"></i>
-          <h5 class="card-title">Posts</h5>
+          <h5 class="card-title">Loans</h5>
           <p class="card-text">Create, view, and manage your blog posts.</p>
           <%= link_to 'Posts', posts_path, class: 'btn btn-outline-success btn-sm' %>
         </div>
@@ -44,7 +44,7 @@
     <div class="col-md-4">
       <div class="card text-center border-0 shadow-sm">
         <div class="card-body">
-          <h6 class="text-muted">Total Posts</h6>
+          <h6 class="text-muted">Total Loans</h6>
           <h2><%= Post.count %></h2>
         </div>
       </div>
@@ -57,15 +57,7 @@
         </div>
       </div>
     </div>
-    <div class="col-md-4">
-      <div class="card text-center border-0 shadow-sm">
-        <div class="card-body">
-          <h6 class="text-muted">Tickets</h6>
-          <h2><%= Ticket.count %></h2>
-        </div>
-      </div>
-    </div>
-  </div>
+
 
   <!-- Table of Recent Posts -->
   <div class="row mb-4">
@@ -119,15 +111,6 @@
   </div>
 
   <div class="row">
-    <div class="col-md-6 mb-3">
-      <div class="card border-0 bg-light shadow-sm">
-        <div class="card-body">
-          <h5 class="card-title">Tickets</h5>
-          <p class="card-text">Need help? View or create support tickets.</p>
-          <%= link_to 'Tickets', tickets_path, class: 'btn btn-outline-dark btn-sm' %>
-        </div>
-      </div>
-    </div>
     <div class="col-md-6 mb-3">
       <div class="card border-0 bg-light shadow-sm">
         <div class="card-body">

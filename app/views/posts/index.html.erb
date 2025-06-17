@@ -19,7 +19,7 @@
       <% @posts.each do |post| %>
         <tr>
           <td><%= post.borrower_name %></td>
-          <td><%= number_to_currency(post.amount) %></td>
+          <td><%= number_to_peso(post.amount) %></td>
           <td><%= post.interest_rate %></td>
           <td><%= post.term_months %></td>
           <td><%= post.start_date.strftime("%Y-%m-%d") %></td>

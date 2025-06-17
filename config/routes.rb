@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  resources :tickets
   get "user/profile"
   # API routes
   scope '/api', defaults: { format: :json } do
