@@ -4,7 +4,7 @@ class PostsController < ApplicationController
 
   # GET /posts or /posts.json
   def index
-    @posts = Post.all.order(created_at: :desc)
+    @posts = Post.all
   end
 
   # GET /posts/1 or /posts/1.json
@@ -67,6 +67,13 @@ class PostsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def post_params
-      params.expect(post: [ :title, :body ])
+      params.require(:post).permit(
+        :borrower_name,
+        :amount,
+        :interest_rate,
+        :term_months,
+        :start_date,
+        :purpose
+      )
     end
 end

@@ -1,31 +1,32 @@
 <p style="color: green"><%= notice %></p>
 
-<% content_for :title, "Posts" %>
+<% content_for :title, "Loans" %>
 
 <div id="posts" class="container">
-  <h1 class="mb-4">All Posts</h1>
-  <div class="row">
-    <% @posts.each do |post| %>
-      <div class="col-md-6 col-lg-4 mb-4">
-        <div class="card h-100 shadow-sm">
-          <div class="card-body d-flex flex-column">
-            <h5 class="card-title"><%= post.title %></h5>
-            <p class="card-text text-muted"><%= truncate(post.body, length: 100) %></p>
-            <p class="card-text">
-              <span class="badge bg-secondary"><%= pluralize(post.views || 0, "view") %></span>
-            </p>
-            <div class="mt-auto">
-              <%= link_to 'Show', post_path(post), class: "btn btn-sm btn-outline-primary me-2" %>
-              <%= link_to 'Edit', edit_post_path(post), class: "btn btn-sm btn-outline-success me-2" %>
-              <%= link_to 'Delete', post_path(post), method: :delete, data: { turbo_confirm: "Are you sure?" }, class: "btn btn-sm btn-outline-danger" %>
-            </div>
-          </div>
-          <div class="card-footer text-muted small">
-            Posted by <%= post.user&.email || "Unknown" %>
-          </div>
-        </div>
-      </div>
-    <% end %>
-  </div>
+  <h1 class="mb-4">All Loans</h1>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Borrower Name</th>
+        <th>Amount</th>
+        <th>Interest Rate (%)</th>
+        <th>Term (Months)</th>
+        <th>Start Date</th>
+        <th>Purpose</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @posts.each do |post| %>
+        <tr>
+          <td><%= post.borrower_name %></td>
+          <td><%= number_to_currency(post.amount) %></td>
+          <td><%= post.interest_rate %></td>
+          <td><%= post.term_months %></td>
+          <td><%= post.start_date.strftime("%Y-%m-%d") %></td>
+          <td><%= post.purpose %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
   <%= link_to 'New Post', new_post_path, class: "btn btn-primary" %>
 </div>

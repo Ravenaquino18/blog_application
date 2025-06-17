@@ -2,7 +2,6 @@
   <% if post.errors.any? %>
     <div style="color: red">
       <h2><%= pluralize(post.errors.count, "error") %> prohibited this post from being saved:</h2>
-
       <ul>
         <% post.errors.each do |error| %>
           <li><%= error.full_message %></li>
@@ -12,16 +11,30 @@
   <% end %>
 
   <div>
-    <%= form.label :title, style: "display: block" %>
-    <%= form.text_field :title %>
+    <%= form.label :borrower_name, "Borrower Name", style: "display: block" %>
+    <%= form.text_field :borrower_name %>
   </div>
-
   <div>
-    <%= form.label :body, style: "display: block" %>
-    <%= form.textarea :body %>
+    <%= form.label :amount, "Loan Amount", style: "display: block" %>
+    <%= form.number_field :amount, step: 100 %>
   </div>
-
   <div>
-    <%= form.submit %>
+    <%= form.label :interest_rate, "Interest Rate (%)", style: "display: block" %>
+    <%= form.number_field :interest_rate, step: 0.01 %>
+  </div>
+  <div>
+    <%= form.label :term_months, "Term (Months)", style: "display: block" %>
+    <%= form.number_field :term_months %>
+  </div>
+  <div>
+    <%= form.label :start_date, "Start Date", style: "display: block" %>
+    <%= form.date_field :start_date %>
+  </div>
+  <div>
+    <%= form.label :purpose, "Purpose", style: "display: block" %>
+    <%= form.text_area :purpose %>
+  </div>
+  <div>
+    <%= form.submit "Save Loan" %>
   </div>
 <% end %>

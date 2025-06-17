@@ -10,7 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_11_085837) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_17_013958) do
+  create_table "credit_cards", force: :cascade do |t|
+    t.string "name"
+    t.string "number"
+    t.string "expiry"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "posts", force: :cascade do |t|
     t.string "title"
     t.text "body"
@@ -18,6 +26,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_11_085837) do
     t.datetime "updated_at", null: false
     t.integer "views", default: 0
     t.integer "user_id", null: false
+    t.string "borrower_name"
+    t.decimal "amount"
+    t.decimal "interest_rate"
+    t.integer "term_months"
+    t.date "start_date"
+    t.text "purpose"
     t.index ["user_id"], name: "index_posts_on_user_id"
   end
 
