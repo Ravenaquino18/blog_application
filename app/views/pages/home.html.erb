@@ -23,7 +23,7 @@
           <i class="bi bi-file-earmark-text display-4 text-success mb-2"></i>
           <h5 class="card-title">Loans</h5>
           <p class="card-text">Create, view, and manage your blog posts.</p>
-          <%= link_to 'Posts', posts_path, class: 'btn btn-outline-success btn-sm' %>
+          <%= link_to 'Loans', posts_path, class: 'btn btn-outline-success btn-sm' %>
         </div>
       </div>
     </div>
@@ -64,14 +64,14 @@
     <div class="col-12">
       <div class="card border-0 shadow-sm">
         <div class="card-header bg-light">
-          <h5 class="mb-0">Recent Posts</h5>
+          <h5 class="mb-0">Recent Loans</h5>
         </div>
         <div class="card-body p-0">
           <table class="table table-hover mb-0">
             <thead>
               <tr>
-                <th>Title</th>
-                <th>Author</th>
+                <th>Loans</th>
+                <th>User</th>
                 <th>Views</th>
                 <th>Created</th>
                 <th></th>
@@ -80,7 +80,7 @@
             <tbody>
               <% Post.order(created_at: :desc).limit(5).each do |post| %>
                 <tr>
-                  <td><%= post.title %></td>
+                  <td><%= post.amount %></td>
                   <td><%= post.user&.email || "Unknown" %></td>
                   <td><%= post.views || 0 %></td>
                   <td><%= post.created_at.strftime("%b %d, %Y") %></td>
@@ -101,7 +101,7 @@
     <div class="col-12">
       <div class="card border-0 shadow-sm">
         <div class="card-header bg-light">
-          <h5 class="mb-0">Posts Created (Last 7 Days)</h5>
+          <h5 class="mb-0">Loans Created (Last 7 Days)</h5>
         </div>
         <div class="card-body">
           <canvas id="postsChart" height="80"></canvas>

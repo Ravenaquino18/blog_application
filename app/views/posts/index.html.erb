@@ -22,7 +22,7 @@
           <td><%= number_to_peso(post.amount) %></td>
           <td><%= post.interest_rate %></td>
           <td><%= post.term_months %></td>
-          <td><%= post.start_date.strftime("%Y-%m-%d") %></td>
+          <td><%= post.start_date.present? ? post.start_date.strftime("%Y-%m-%d") : "" %></td>
           <td><%= post.purpose %></td>
         </tr>
       <% end %>
