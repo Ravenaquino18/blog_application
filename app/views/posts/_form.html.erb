@@ -40,10 +40,10 @@
     <%= form.label :purpose, "Purpose", style: "display: block" %>
     <%= form.text_area :purpose %>
   </div>
-  <div>
-    <%= form.label :status, "Status", style: "display: block" %>
-    <%= form.text_area :status %>
-  </div>
+<div>
+  <%= form.label :status, "Status", style: "display: block" %>
+  <%= form.select :status, options_for_select([["Pending", "Pending"], ["Approved", "Approved"], ["Rejected", "Rejected"]], selected: post.status || "Pending") %>
+</div>
   <div>
     <%= form_with(model: @post) do |form| %>
   <!-- form fields here -->
@@ -53,3 +53,4 @@
 
   
 <% end %>
+ 

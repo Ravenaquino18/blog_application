@@ -5,6 +5,6 @@ class Post < ApplicationRecord
     validates :term_months, presence: true, numericality: { only_integer: true, greater_than: 0, less_than_or_equal_to: 500 }
     validates :start_date, presence: true
     validates :purpose, presence: true, length: { minimum: 10, maximum: 500 }
-
+    
     belongs_to :user
 end
