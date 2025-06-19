@@ -28,7 +28,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_19_022627) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "views", default: 0
-    t.bigint "user_id", null: false
+    t.integer "user_id", null: false
     t.string "borrower_name"
     t.decimal "amount"
     t.decimal "interest_rate"
@@ -37,6 +37,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_19_022627) do
     t.text "purpose"
     t.string "status"
     t.index ["user_id"], name: "index_posts_on_user_id"
+  end
+
+  create_table "tickets", force: :cascade do |t|
+    t.string "title"
+    t.integer "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade do |t|

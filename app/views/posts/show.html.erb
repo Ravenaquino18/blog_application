@@ -14,9 +14,19 @@
           <p><%= simple_format(@post.body) %></p>
           <% @post.attributes.each do |attr, value| %>
             <% unless ["id", "title", "body", "views", "created_at", "updated_at", "author"].include?(attr) %>
-              <p><strong><%= attr.humanize %>:</strong> <%= value %></p>
+              <p>
+                <strong><%= attr.humanize %>:</strong> <%= value %>
+                <% if ["interest_rate"].include?(attr) %>
+                  <br>
+                <% end %>
+              </p>
             <% end %>
           <% end %>
+
+          <p>
+            <strong>Total Payables:  ₱</strong> <%= @post.total_payables %>
+            <br>
+          </p>
         </div>
         <div class="card-footer d-flex justify-content-between align-items-center">
           <div>
