@@ -1,4 +1,6 @@
 <div class="container py-5">
+
+  <!-- Dashboard Title -->
   <div class="row mb-4">
     <div class="col-12 text-center">
       <h1 class="display-4 mb-3">Dashboard</h1>
@@ -6,6 +8,7 @@
     </div>
   </div>
 
+  <!-- Top Boxes Row (Profile, Loans, About) -->
   <div class="row mb-4">
     <div class="col-md-4">
       <div class="card shadow-sm border-0">
@@ -55,11 +58,24 @@
           <h6 class="text-muted">Total Users</h6>
           <h2><%= User.count %></h2>
         </div>
+      </div>  
+    </div>
+    <div class="col-md-4">
+      <div class="card text-center border-0 shadow-sm">
+        <div class="card-body">
+          <h6 class="text-muted">Highest Loaner</h6>
+          <% highest_loan = Post.order(amount: :desc).first %>
+          <% if highest_loan && highest_loan.user %>
+            <h2><%= highest_loan.user.name.presence || highest_loan.borrower_name %></h2>
+          <% else %>
+            <h2>Unknown</h2>
+          <% end %>
+        </div>
       </div>
     </div>
+  </div>
 
-
-  <!-- Table of Recent Posts -->
+  <!-- Tables at the Bottom -->
   <div class="row mb-4">
     <div class="col-12">
       <div class="card border-0 shadow-sm">
@@ -68,24 +84,29 @@
         </div>
         <div class="card-body p-0">
           <table class="table table-hover mb-0">
-            <thead>
+            <thead class="table-light">
               <tr>
-                <th>Loans</th>
-                <th>User</th>
-                <th>Views</th>
-                <th>Created</th>
-                <th></th>
+                <th scope="col">Borrower</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Created At</th>
+                <th scope="col">Status</th>
+                <th scope="col"></th>
               </tr>
             </thead>
             <tbody>
               <% Post.order(created_at: :desc).limit(5).each do |post| %>
                 <tr>
-                  <td><%= post.amount %></td>
-                  <td><%= post.user&.email || "Unknown" %></td>
-                  <td><%= post.views || 0 %></td>
-                  <td><%= post.created_at.strftime("%b %d, %Y") %></td>
                   <td>
-                    <%= link_to 'Show', post_path(post), class: "btn btn-sm btn-outline-primary" %>
+                    <%= post.user&.name.presence || post.borrower_name || "Unknown" %>
+                  </td>
+                  <td>
+                    <%= number_to_currency(post.amount, unit: "₱", delimiter: ",", precision: 2) if post.respond_to?(:amount) %>
+                  </td>
+                  <td>
+                    <%= post.created_at.strftime("%b %d, %Y") %>
+                  </td>
+                  <td>
+                    <%= link_to 'View', post_path(post), class: 'btn btn-sm btn-outline-primary' %>
                   </td>
                 </tr>
               <% end %>
@@ -96,7 +117,38 @@
     </div>
   </div>
 
-  <!-- Example Graph (Chart.js) -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">Loan Totals Summary</h5>
+        </div>
+        <div class="card-body p-0">
+          <table class="table table-bordered mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>Total Loans</th>
+                <th>Total Interest</th>
+                <th>Overall Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% total_loans = Post.sum(:amount) %>
+              <% total_interest = Post.all.sum { |post| post.amount.to_f * (post.interest_rate.to_f / 100) } %>
+              <% overall_total = total_loans + total_interest %>
+              <tr>
+                <td><%= number_to_currency(total_loans, unit: "₱") %></td>
+                <td><%= number_to_currency(total_interest, unit: "₱") %></td>
+                <td><%= number_to_currency(overall_total, unit: "₱") %></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chart Row -->
   <div class="row mb-4">
     <div class="col-12">
       <div class="card border-0 shadow-sm">
@@ -110,7 +162,8 @@
     </div>
   </div>
 
-  <div class="row">
+  <!-- Credit Cards Box -->
+  <div class="row mb-4">
     <div class="col-md-6 mb-3">
       <div class="card border-0 bg-light shadow-sm">
         <div class="card-body">
@@ -121,45 +174,48 @@
       </div>
     </div>
   </div>
-</div>
 
-<!-- Chart.js Script (add Chart.js to your layout or asset pipeline for this to work) -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
-    var ctx = document.getElementById('postsChart').getContext('2d');
-    var postsData = <%= raw(
-      (0..6).map { |i|
-        Post.where(created_at: (Date.today - i).all_day).count
-      }.reverse.to_json
-    ) %>;
-    var postsLabels = <%= raw(
-      (0..6).map { |i|
-        (Date.today - i).strftime("%a")
-      }.reverse.to_json
-    ) %>;
-    new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: postsLabels,
-        datasets: [{
-          label: 'Posts',
-          data: postsData,
-          backgroundColor: 'rgba(13,110,253,0.1)',
-          borderColor: 'rgba(13,110,253,1)',
-          borderWidth: 2,
-          tension: 0.3,
-          fill: true,
-          pointRadius: 4,
-          pointBackgroundColor: 'rgba(13,110,253,1)'
-        }]
-      },
-      options: {
-        plugins: { legend: { display: false } },
-        scales: {
-          y: { beginAtZero: true, precision: 0 }
+  <!-- Chart.js Script (unchanged) -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      var ctx = document.getElementById('postsChart').getContext('2d');
+      var postsData = <%= raw(
+        (0..6).map { |i|
+          Post.where(created_at: (Date.today - i).all_day).count
+        }.reverse.to_json
+      ) %>;
+      var postsLabels = <%= raw(
+        (0..6).map { |i|
+          (Date.today - i).strftime("%a")
+        }.reverse.to_json
+      ) %>;
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: postsLabels,
+          datasets: [{
+            label: 'Posts',
+            data: postsData,
+            backgroundColor: 'rgba(13,110,253,0.1)',
+            borderColor: 'rgba(13,110,253,1)',
+            borderWidth: 2,
+            tension: 0.3,
+            fill: true,
+            pointRadius: 4,
+            pointBackgroundColor: 'rgba(13,110,253,1)'
+          }]
+        },
+        options: {
+          plugins: { legend: { display: false } },
+          scales: {
+            y: { beginAtZero: true, precision: 0 }
+          }
         }
-      }
+      });
     });
-  });
-</script>
+  </script>
+
+  
+
+</div>

@@ -1,10 +1,16 @@
 <% if flash[:notice] %>
-  <div class="alert alert-success">
-    <%= flash[:notice] %>
+  <div class="alert alert-success" style="border: 1px solid #28a745; background-color: #d4edda; color: #155724; padding: 16px; border-radius: 6px; margin-bottom: 16px; box-shadow: 0 2px 6px rgba(40,167,69,0.1);">
+    <strong>Success!</strong> <%= flash[:notice] %>
   </div>
 <% end %>
 <% if flash[:alert] %>
-  <div class="alert alert-danger">
-    <%= flash[:alert] %>
+  <div class="alert alert-danger" style="border: 1px solid #dc3545; background-color: #f8d7da; color: #721c24; padding: 16px; border-radius: 6px; margin-bottom: 16px; box-shadow: 0 2px 6px rgba(220,53,69,0.1);">
+    <strong>Error!</strong> <%= flash[:alert] %>
+  </div>
+<% end %>
+
+<% if flash[:loan_saved] %>
+  <div class="alert alert-warning" style="border: 1px solid #ffc107; background-color: #fff3cd; color: #856404; padding: 16px; border-radius: 6px; margin-bottom: 16px; box-shadow: 0 2px 6px rgba(255,193,7,0.1);">
+    <strong>Notice:</strong> <%= flash[:loan_saved] %>
   </div>
 <% end %>
