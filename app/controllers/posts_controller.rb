@@ -2,6 +2,16 @@ class PostsController < ApplicationController
   before_action :set_post, only: %i[ show edit update destroy ]
   before_action :authenticate_user!, except: %i[ index show ] 
 
+
+  def create
+  @post = Post.new(post_params)
+  if @post.save
+    redirect_to post_path(@post), notice: "Post was successfully created."
+  else
+    render :new
+  end
+end
+
   # GET /posts or /posts.json
   def index
     @posts = Post.all

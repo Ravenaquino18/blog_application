@@ -35,6 +35,9 @@
     <%= form.text_area :purpose %>
   </div>
   <div>
-    <%= form.submit "Save Loan" %>
+    <%= form_with(model: @post) do |form| %>
+  <!-- form fields here -->
+  <%= form.submit "Save Loan", class: "btn btn-outline-success" %>
+<% end %>
   </div>
 <% end %>
