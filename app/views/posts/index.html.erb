@@ -13,6 +13,10 @@
         <th>Term (Months)</th>
         <th>Start Date</th>
         <th>Purpose</th>
+        <th>Status</th>
+        <th></th>
+        <th></th>
+        <th></th>
         <th></th>
       </tr>
     </thead>
@@ -25,8 +29,16 @@
           <td><%= post.term_months %></td>
           <td><%= post.start_date.present? ? post.start_date.strftime("%Y-%m-%d") : "" %></td>
           <td><%= post.purpose %></td>
+          <td><%= post.status %></td>
           <td>
             <%= link_to 'Edit', edit_post_path(post), class: "btn btn-sm btn-warning" %>
+          </td>
+          <td>
+            <button class="btn btn-sm btn-success">Approve</button>
+          </td>
+          <td>
+            <button class="btn btn-sm btn-danger">Declined</button>
+
           </td>
         </tr>
       <% end %>
