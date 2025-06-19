@@ -13,6 +13,7 @@
         <th>Term (Months)</th>
         <th>Start Date</th>
         <th>Purpose</th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
@@ -24,9 +25,12 @@
           <td><%= post.term_months %></td>
           <td><%= post.start_date.present? ? post.start_date.strftime("%Y-%m-%d") : "" %></td>
           <td><%= post.purpose %></td>
+          <td>
+            <%= link_to 'Edit', edit_post_path(post), class: "btn btn-sm btn-warning" %>
+          </td>
         </tr>
       <% end %>
     </tbody>
   </table>
-  <%= link_to 'New Post', new_post_path, class: "btn btn-primary" %>
+  <%= link_to 'New Loan', new_post_path, class: "btn btn-primary" %>
 </div>

@@ -1,14 +1,16 @@
-<div class="container">
-<% content_for :title, "Editing post" %>
+<p style="color: green"><%= notice %></p>
 
-<h1>Editing post</h1>
+<% content_for :title, "Editing Loan" %>
 
-<%= render "form", post: @post %>
+<div id="posts" class="container">
+  <h1 class="mb-4">Edit Loan</h1>
 
-<br>
+  <%= render "form", post: @post %>
 
-<div>
-  <%= link_to "Show this post", @post %> |
-  <%= link_to "Back to posts", posts_path %>
-</div>
+  <br>
+
+  <div>
+    <%= link_to "Show this loan", @post, class: "btn btn-success" %>
+    <%= link_to "Back to loans", posts_path, class: "btn btn-secondary" %>
+  </div>
 </div>
