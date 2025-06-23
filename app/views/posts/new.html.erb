@@ -7,7 +7,7 @@
         </div>
         <div class="card-body">
           <p style="color: green"><%= notice %></p>
-          <%= render "form", post: @post %>
+          <%= render "posts/partials/form", post: @post %>
           
           <div class="mt-3">
             <%= link_to "Back to posts", posts_path, class: "btn btn-outline-secondary" %>
