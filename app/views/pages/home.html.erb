@@ -1,85 +1,91 @@
+<%# app/views/pages/home.html.erb %>
+
 <div class="container py-5">
 
-  <!-- Dashboard Title -->
-  <div class="row mb-4">
+  <div class="row mb-5">
     <div class="col-12 text-center">
       <h1 class="display-4 mb-3">Dashboard</h1>
       <p class="lead">Welcome back! Here’s a quick overview of your application.</p>
     </div>
   </div>
 
-  <!-- Top Boxes Row (Profile, Loans, About) -->
-  <div class="row mb-4">
-    <div class="col-md-4">
-      <div class="card shadow-sm border-0">
-        <div class="card-body text-center">
-          <i class="bi bi-person-lines-fill display-4 text-primary mb-2"></i>
-          <h5 class="card-title">Profile</h5>
-          <p class="card-text">View and edit your user profile and account settings.</p>
-          <%= link_to 'Profile', user_path(current_user), class: 'btn btn-outline-primary btn-sm' if current_user %>
+  <div class="row mb-5 g-4">
+    <div class="col-md-3">
+      <div class="card text-center border-0 shadow-sm h-100">
+        <div class="card-body d-flex flex-column justify-content-center align-items-center">
+          <i class="bi bi-people-fill display-4 text-primary mb-2"></i>
+          <h5 class="card-title text-muted">Total Users</h5>
+          <h2 class="display-5 fw-bold"><%= @total_users %></h2>
         </div>
       </div>
     </div>
-
-    <div class="col-md-4">
-      <div class="card shadow-sm border-0">
-        <div class="card-body text-center">
-          <i class="bi bi-file-earmark-text display-4 text-success mb-2"></i>
-          <h5 class="card-title">Loans</h5>
-          <p class="card-text">Create, view, and manage your blog posts.</p>
-          <%= link_to 'Loans', posts_path, class: 'btn btn-outline-success btn-sm' %>
+    <div class="col-md-3">
+      <div class="card text-center border-0 shadow-sm h-100">
+        <div class="card-body d-flex flex-column justify-content-center align-items-center">
+          <i class="bi bi-cash-stack display-4 text-success mb-2"></i>
+          <h5 class="card-title text-muted">Total Loans</h5>
+          <h2 class="display-5 fw-bold"><%= @total_loans %></h2>
         </div>
       </div>
     </div>
-    <div class="col-md-4">
-      <div class="card shadow-sm border-0">
-        <div class="card-body text-center">
-          <i class="bi bi-info-circle display-4 text-warning mb-2"></i>
-          <h5 class="card-title">About</h5>
-          <p class="card-text">Learn more about this application and its features.</p>
-          <%= link_to 'About', about_path, class: 'btn btn-outline-warning btn-sm' %>
+    <div class="col-md-3">
+      <div class="card text-center border-0 shadow-sm h-100">
+        <div class="card-body d-flex flex-column justify-content-center align-items-center">
+          <i class="bi bi-hourglass-split display-4 text-warning mb-2"></i>
+          <h5 class="card-title text-muted">Loans Pending</h5>
+          <h2 class="display-5 fw-bold"><%= @total_pending_loans %></h2>
         </div>
       </div>
     </div>
-  </div>
-
-  <!-- Stats Row -->
-  <div class="row mb-4">
-    <div class="col-md-4">
-      <div class="card text-center border-0 shadow-sm">
-        <div class="card-body">
-          <h6 class="text-muted">Total Loans</h6>
-          <h2><%= Post.count %></h2>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="card text-center border-0 shadow-sm">
-        <div class="card-body">
-          <h6 class="text-muted">Total Users</h6>
-          <h2><%= User.count %></h2>
-        </div>
-      </div>  
-    </div>
-    <div class="col-md-4">
-      <div class="card text-center border-0 shadow-sm">
-        <div class="card-body">
-          <h6 class="text-muted">Highest Loaner</h6>
-          <% highest_loan = Post.order(amount: :desc).first %>
-          <% if highest_loan && highest_loan.user %>
-            <h2><%= highest_loan.user.name.presence || highest_loan.borrower_name %></h2>
-          <% else %>
-            <h2>Unknown</h2>
-          <% end %>
+    <div class="col-md-3">
+      <div class="card text-center border-0 shadow-sm h-100">
+        <div class="card-body d-flex flex-column justify-content-center align-items-center">
+          <i class="bi bi-exclamation-triangle-fill display-4 text-danger mb-2"></i>
+          <h5 class="card-title text-muted">Loans Overdue</h5>
+          <h2 class="display-5 fw-bold"><%= @total_overdue_loans %></h2>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Tables at the Bottom -->
-  <div class="row mb-4">
-    <div class="col-12">
-      <div class="card border-0 shadow-sm">
+  <div class="row g-4">
+
+    <div class="col-lg-8">
+
+      <div class="row mb-4 g-4">
+        <div class="col-md-4">
+          <div class="card text-center border-0 shadow-sm h-100">
+            <div class="card-body">
+              <h6 class="text-muted">Total Loans (Amount)</h6>
+              <h2><%= number_to_currency(Post.sum(:amount), unit: "₱", delimiter: ",", precision: 2) %></h2>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card text-center border-0 shadow-sm h-100">
+            <div class="card-body">
+              <h6 class="text-muted">Total Interest Earned</h6>
+              <h2><%= number_to_currency(Post.all.sum { |post| post.total_interest_earned }, unit: "₱", delimiter: ",", precision: 2) %></h2>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card text-center border-0 shadow-sm h-100">
+            <div class="card-body">
+              <h6 class="text-muted">Highest Loaner</h6>
+              <% highest_loan = Post.order(amount: :desc).first %>
+              <% if highest_loan && highest_loan.user %>
+                <h2><%= highest_loan.user.name.presence || highest_loan.borrower_name %></h2>
+              <% else %>
+                <h2>N/A</h2>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="card border-0 shadow-sm mb-4">
         <div class="card-header bg-light">
           <h5 class="mb-0">Recent Loans</h5>
         </div>
@@ -95,7 +101,7 @@
               </tr>
             </thead>
             <tbody>
-              <% Post.order(created_at: :desc).limit(5).each do |post| %>
+              <% @recent_loans.each do |post| %>
                 <tr>
                   <td>
                     <%= post.user&.name.presence || post.borrower_name || "Unknown" %>
@@ -107,6 +113,22 @@
                     <%= post.created_at.strftime("%b %d, %Y") %>
                   </td>
                   <td>
+                    <% if post.respond_to?(:status) && post.status.present? %>
+                      <span class="badge <%= case post.status.downcase
+                                              when 'pending' then 'bg-warning text-dark'
+                                              when 'approved' then 'bg-success'
+                                              when 'rejected' then 'bg-danger'
+                                              when 'overdue' then 'bg-danger'
+                                              when 'completed' then 'bg-primary'
+                                              else 'bg-secondary'
+                                              end %>">
+                        <%= post.status.capitalize %>
+                      </span>
+                    <% else %>
+                      <span class="badge bg-secondary">No Status</span>
+                    <% end %>
+                  </td>
+                  <td>
                     <%= link_to 'View', post_path(post), class: 'btn btn-sm btn-outline-primary' %>
                   </td>
                 </tr>
@@ -115,12 +137,8 @@
           </table>
         </div>
       </div>
-    </div>
-  </div>
 
-  <div class="row mb-4">
-    <div class="col-12">
-      <div class="card border-0 shadow-sm">
+      <div class="card border-0 shadow-sm mb-4">
         <div class="card-header bg-light">
           <h5 class="mb-0">Loan Totals Summary</h5>
         </div>
@@ -128,58 +146,110 @@
           <table class="table table-bordered mb-0">
             <thead class="table-light">
               <tr>
-                <th>Total Loans</th>
-                <th>Total Interest</th>
-                <th>Overall Total</th>
+                <th>Total Loans (Amount)</th>
+                <th>Total Interest Accrued</th>
+                <th>Overall Total (Principal + Interest)</th>
               </tr>
             </thead>
             <tbody>
-              <% total_loans = Post.sum(:amount) %>
-              <% total_interest = Post.all.sum { |post| post.amount.to_f * (post.interest_rate.to_f / 100) } %>
-              <% overall_total = total_loans + total_interest %>
               <tr>
-                <td><%= number_to_currency(total_loans, unit: "₱") %></td>
-                <td><%= number_to_currency(total_interest, unit: "₱") %></td>
-                <td><%= number_to_currency(overall_total, unit: "₱") %></td>
+                <td><%= number_to_currency(@overall_total_loans, unit: "₱") %></td>
+                <td><%= number_to_currency(@overall_total_interest, unit: "₱") %></td>
+                <td><%= number_to_currency(@overall_total_payables, unit: "₱") %></td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
-    </div>
-  </div>
 
-  <!-- Chart Row -->
-  <div class="row mb-4">
-    <div class="col-12">
-      <div class="card border-0 shadow-sm">
+      <div class="card border-0 shadow-sm mb-4">
         <div class="card-header bg-light">
           <h5 class="mb-0">Loans Created (Last 7 Days)</h5>
         </div>
         <div class="card-body">
-          <canvas id="postsChart" height="80"></canvas>
+          <div class="chart-container" style="position: relative; height:30vh; width:100%;">
+             <canvas id="postsChart"></canvas>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
 
-  <!-- Credit Cards Box -->
-  <div class="row mb-4">
-    <div class="col-md-6 mb-3">
-      <div class="card border-0 bg-light shadow-sm">
+    </div> <div class="col-lg-4">
+
+      <div class="card border-0 shadow-sm mb-4">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0">Loan Utilities & Calculators</h5>
+        </div>
+        <div class="card-body text-center">
+          <div class="row g-2">
+            <div class="col-6">
+              <%= link_to interest_calculator_path, class: "btn btn-outline-primary w-100 py-3 d-flex flex-column align-items-center justify-content-center" do %>
+                <i class="bi bi-calculator fs-4 mb-1"></i>
+                Interest Calculator
+              <% end %>
+            </div>
+            <div class="col-6">
+              <%= link_to penalty_calculator_path, class: "btn btn-outline-success w-100 py-3 d-flex flex-column align-items-center justify-content-center" do %>
+                <i class="bi bi-currency-dollar fs-4 mb-1"></i>
+                Penalty Calculator
+              <% end %>
+            </div>
+            <div class="col-6">
+              <%= link_to overdues_path, class: "btn btn-outline-danger text-dark w-100 py-3 d-flex flex-column align-items-center justify-content-center" do %>
+                <i class="bi bi-calendar-x fs-4 mb-1"></i>
+                Overdue Loans
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card border-0 shadow-sm mb-4">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">Monthly Loans Distribution</h5>
+        </div>
+        <div class="card-body d-flex flex-column justify-content-center align-items-center">
+          <div class="chart-container" style="position: relative; height:35vh; width:100%; max-width: 300px;">
+            <canvas id="monthlyLoansPie"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <div class="card border-0 shadow-sm mb-4">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">Yearly Loans Distribution</h5>
+        </div>
+        <div class="card-body d-flex flex-column justify-content-center align-items-center">
+          <div class="chart-container" style="position: relative; height:35vh; width:100%; max-width: 300px;">
+            <canvas id="yearlyLoansPie"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <div class="card border-0 bg-light shadow-sm mb-4">
         <div class="card-body">
           <h5 class="card-title">Credit Cards</h5>
           <p class="card-text">Manage your saved credit cards securely.</p>
           <%= link_to 'Credit Cards', credit_cards_path, class: 'btn btn-outline-dark btn-sm' %>
         </div>
       </div>
-    </div>
-  </div>
 
-  <!-- Chart.js Script (unchanged) -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+      <div class="card border-0 shadow-sm mb-4">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">My Notifications</h5>
+        </div>
+        <div class="card-body">
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">Finish Loan Application <span class="badge bg-warning text-dark float-end">Aug 6</span></li>
+            <li class="list-group-item">Upload Bank Statement <span class="badge bg-info text-dark float-end">Aug 5</span></li>
+            <li class="list-group-item">Loan #123 Approved! <span class="badge bg-success float-end">Today</span></li>
+          </ul>
+        </div>
+      </div>
+
+    </div> </div> <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
     document.addEventListener("DOMContentLoaded", function() {
+      // Line Chart
       var ctx = document.getElementById('postsChart').getContext('2d');
       var postsData = <%= raw(
         (0..6).map { |i|
@@ -196,7 +266,7 @@
         data: {
           labels: postsLabels,
           datasets: [{
-            label: 'Posts',
+            label: 'Loans',
             data: postsData,
             backgroundColor: 'rgba(13,110,253,0.1)',
             borderColor: 'rgba(13,110,253,1)',
@@ -208,15 +278,82 @@
           }]
         },
         options: {
+          responsive: true,
+          maintainAspectRatio: false,
           plugins: { legend: { display: false } },
           scales: {
             y: { beginAtZero: true, precision: 0 }
           }
         }
       });
+
+      // Monthly Loans Pie Chart
+      var ctxPie = document.getElementById('monthlyLoansPie').getContext('2d');
+      var monthlyData = <%= raw(
+        (0..11).map { |i|
+          Post.where(created_at: (Date.today.beginning_of_month - i.months)..(Date.today.end_of_month - i.months)).sum(:amount)
+        }.reverse.to_json
+      ) %>;
+      var monthlyLabels = <%= raw(
+        (0..11).map { |i|
+          (Date.today - i.months).strftime("%b %Y")
+        }.reverse.to_json
+      ) %>;
+      new Chart(ctxPie, {
+        type: 'pie',
+        data: {
+          labels: monthlyLabels,
+          datasets: [{
+            label: 'Loan Amounts',
+            data: monthlyData,
+            backgroundColor: [
+              '#0d6efd', '#198754', '#ffc107', '#dc3545', '#6f42c1', '#fd7e14',
+              '#20c997', '#0dcaf0', '#6610f2', '#6c757d', '#f8f9fa', '#343a40'
+            ]
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: true, position: 'bottom' }
+          }
+        }
+      });
+
+      // Yearly Loans Pie Chart
+      var ctxYearly = document.getElementById('yearlyLoansPie').getContext('2d');
+      var yearlyData = <%= raw(
+        (0..4).map { |i|
+          Post.where(created_at: (Date.today.beginning_of_year - i.years)..(Date.today.end_of_year - i.years)).sum(:amount)
+        }.reverse.to_json
+      ) %>;
+      var yearlyLabels = <%= raw(
+        (0..4).map { |i|
+          (Date.today - i.years).strftime("%Y")
+        }.reverse.to_json
+      ) %>;
+      new Chart(ctxYearly, {
+        type: 'pie',
+        data: {
+          labels: yearlyLabels,
+          datasets: [{
+            label: 'Loan Amounts',
+            data: yearlyData,
+            backgroundColor: [
+              '#0d6efd', '#198754', '#ffc107', '#dc3545', '#6f42c1'
+            ]
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: true, position: 'bottom' }
+          }
+        }
+      });
     });
   </script>
-
-  
 
 </div>

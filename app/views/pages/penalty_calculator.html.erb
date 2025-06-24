@@ -1,0 +1,59 @@
+<div class="container py-5">
+  <h1 class="mb-4">Penalty Calculator</h1>
+
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <%= form_with url: calculate_penalty_path, method: :post, local: true, class: "needs-validation", novalidate: true do |form| %>
+        <div class="mb-3">
+          <%= form.label :overdue_amount, "Overdue Amount (₱)", class: "form-label" %>
+          <%= form.number_field :overdue_amount, step: :any, min: 0, required: true, class: "form-control", placeholder: "e.g., 5000" %>
+          <div class="invalid-feedback">
+            Please enter the overdue amount.
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <%= form.label :penalty_rate, "Penalty Rate (per month, %)", class: "form-label" %>
+          <%= form.number_field :penalty_rate, step: :any, min: 0, required: true, class: "form-control", placeholder: "e.g., 5 (for 5% per month)" %>
+          <div class="invalid-feedback">
+            Please enter the penalty rate.
+          </div>
+        </div>
+
+        <%= form.submit "Calculate Penalty", class: "btn btn-success" %>
+      <% end %>
+    </div>
+  </div>
+
+  <% if @calculated_penalty.present? %>
+    <div class="card shadow-sm mt-4">
+      <div class="card-header bg-success text-white">
+        <h5 class="mb-0">Calculation Results</h5>
+      </div>
+      <div class="card-body">
+        <p class="fs-5">Calculated Penalty: <strong><%= number_to_currency(@calculated_penalty, unit: "₱", delimiter: ",", precision: 2) %></strong></p>
+        <p class="fs-5">Total Amount with Penalty: <strong><%= number_to_currency(@total_with_penalty, unit: "₱", delimiter: ",", precision: 2) %></strong></p>
+      </div>
+    </div>
+  <% end %>
+
+  <%= link_to 'Back to Dashboard', root_path, class: 'btn btn-secondary mt-4' %>
+</div>
+
+<script>
+// Bootstrap form validation
+(function () {
+  'use strict'
+  var forms = document.querySelectorAll('.needs-validation')
+  Array.prototype.slice.call(forms)
+    .forEach(function (form) {
+      form.addEventListener('submit', function (event) {
+        if (!form.checkValidity()) {
+          event.preventDefault()
+          event.stopPropagation()
+        }
+        form.classList.add('was-validated')
+      }, false)
+    })
+})()
+</script>

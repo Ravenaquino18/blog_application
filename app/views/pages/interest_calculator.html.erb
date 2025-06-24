@@ -1,0 +1,68 @@
+<%# app/views/pages/interest_calculator.html.erb %>
+<div class="container py-5">
+  <h1 class="mb-4">Interest Calculator</h1>
+
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <%= form_with url: calculate_interest_path, method: :post, local: true, class: "needs-validation", novalidate: true do |form| %>
+        <div class="mb-3">
+          <%= form.label :principal, "Loan Principal (₱)", class: "form-label" %>
+          <%= form.number_field :principal, step: :any, min: 0, required: true, class: "form-control", placeholder: "e.g., 10000" %>
+          <div class="invalid-feedback">
+            Please enter a principal amount.
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <%= form.label :rate, "Annual Interest Rate (%)", class: "form-label" %>
+          <%= form.number_field :rate, step: :any, min: 0, required: true, class: "form-control", placeholder: "e.g., 10 (for 10%)" %>
+          <div class="invalid-feedback">
+            Please enter an annual interest rate.
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <%= form.label :term, "Loan Term (Months)", class: "form-label" %>
+          <%= form.number_field :term, min: 1, required: true, class: "form-control", placeholder: "e.g., 12" %>
+          <div class="invalid-feedback">
+            Please enter a loan term in months.
+          </div>
+        </div>
+
+        <%= form.submit "Calculate Interest", class: "btn btn-primary" %>
+      <% end %>
+    </div>
+  </div>
+
+  <% if @calculated_interest.present? %>
+    <div class="card shadow-sm mt-4">
+      <div class="card-header bg-success text-white">
+        <h5 class="mb-0">Calculation Results</h5>
+      </div>
+      <div class="card-body">
+        <p class="fs-5">Calculated Interest: <strong><%= number_to_currency(@calculated_interest, unit: "₱", delimiter: ",", precision: 2) %></strong></p>
+        <p class="fs-5">Total Payable (Principal + Interest): <strong><%= number_to_currency(@calculated_total_payable, unit: "₱", delimiter: ",", precision: 2) %></strong></p>
+      </div>
+    </div>
+  <% end %>
+
+  <%= link_to 'Back to Dashboard', root_path, class: 'btn btn-secondary mt-4' %>
+</div>
+
+<script>
+// Bootstrap form validation
+(function () {
+  'use strict'
+  var forms = document.querySelectorAll('.needs-validation')
+  Array.prototype.slice.call(forms)
+    .forEach(function (form) {
+      form.addEventListener('submit', function (event) {
+        if (!form.checkValidity()) {
+          event.preventDefault()
+          event.stopPropagation()
+        }
+        form.classList.add('was-validated')
+      }, false)
+    })
+})()
+</script>
