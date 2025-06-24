@@ -4,53 +4,62 @@
   </div>
 <% end %>
 
-<%= form_with(model: post) do |form| %>
-  <% if post.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(post.errors.count, "error") %> prohibited this post from being saved:</h2>
-      <ul>
-        <% post.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
+<% if flash[:notice] %>
+  <div class="alert alert-success" style="border: 1px solid #198754; background-color: #d1e7dd; color: #0f5132; padding: 16px; border-radius: 6px; margin-bottom: 16px; box-shadow: 0 2px 6px rgba(25,135,84,0.1);">
+    <strong>Success:</strong> <%= flash[:notice] %>
+  </div>
+<% end %>
 
-  <div>
-    <%= form.label :borrower_name, "Borrower Name", style: "display: block" %>
-    <%= form.text_field :borrower_name %>
+<% if @post.loan_type.present? %>
+  <div class="alert alert-info mt-4 text-center">
+    <strong>Selected Loan Type:</strong>
+    <%= loan_type_label(@post.loan_type) %>
   </div>
-  <div>
-    <%= form.label :amount, "Loan Amount", style: "display: block" %>
-    <%= form.number_field :amount, step: 100 %>
+<% end %>
+
+<%= form_with(model: @post, local: true) do |form| %>
+  <div class="mb-3">
+    <%= form.label :borrower_name, "Borrower Name", class: "form-label" %>
+    <%= form.text_field :borrower_name, class: "form-control" %>
   </div>
-  <div>
-    <%= form.label :interest_rate, "Interest Rate (%)", style: "display: block" %>
-    <%= form.number_field :interest_rate, step: 0.01 %>
+
+  <div class="mb-3">
+    <%= form.label :amount, "Loan Amount", class: "form-label" %>
+    <%= form.number_field :amount, step: 100, class: "form-control" %>
   </div>
-  <div>
-    <%= form.label :term_months, "Term (Months)", style: "display: block" %>
-    <%= form.number_field :term_months %>
+
+  <div class="mb-3">
+    <%= form.label :interest_rate, "Interest Rate (%)", class: "form-label" %>
+    <%= form.number_field :interest_rate, step: 0.01, class: "form-control" %>
   </div>
-  <div>
-    <%= form.label :start_date, "Start Date", style: "display: block" %>
-    <%= form.date_field :start_date %>
+
+  <div class="mb-3">
+    <%= form.label :term_months, "Term (Months)", class: "form-label" %>
+    <%= form.number_field :term_months, class: "form-control" %>
   </div>
-  <div>
-    <%= form.label :purpose, "Purpose", style: "display: block" %>
-    <%= form.text_area :purpose %>
+
+  <div class="mb-3">
+    <%= form.label :start_date, "Start Date", class: "form-label" %>
+    <%= form.date_field :start_date, class: "form-control" %>
   </div>
-<div>
-  <%= form.label :status, "Status", style: "display: block" %>
-  <%= form.select :status, options_for_select([["Pending", "Pending"], ["Approved", "Approved"], ["Rejected", "Rejected"]], selected: post.status || "Pending") %>
+
+  <div class="mb-3">
+    <%= form.label :purpose, "Purpose", class: "form-label" %>
+    <%= form.text_area :purpose, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :status, "Status", class: "form-label" %>
+    <%= form.select :status, options_for_select([["Pending", "Pending"], ["Approved", "Approved"], ["Rejected", "Rejected"]], selected: @post.status || "Pending"), {}, class: "form-select" %>
+  </div>
+
+  <%= form.hidden_field :loan_type %>
+
+  <div class="mb-3">
+    <%= form.submit "Save Loan", class: "btn btn-outline-success w-100" %>
+  </div>
+<% end %>
+
+<div class="text-center mt-3">
+  <%= link_to "← Back to All Loans", posts_path, class: "btn btn-outline-secondary" %>
 </div>
-  <div>
-    <%= form_with(model: @post) do |form| %>
-  <!-- form fields here -->
-  <%= form.submit "Save Loan", class: "btn btn-outline-success" %>
-<% end %>
-  </div>
-
-  
-<% end %>
- 

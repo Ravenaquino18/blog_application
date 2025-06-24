@@ -4,7 +4,8 @@ class Post < ApplicationRecord
     validates :interest_rate, presence: true, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 500 }
     validates :term_months, presence: true, numericality: { only_integer: true, greater_than: 0, less_than_or_equal_to: 500 }
     validates :start_date, presence: true
-    validates :purpose, presence: true, length: { minimum: 10, maximum: 500 }
-    
     belongs_to :user
+    enum status: { Pending: "Pending", Approved: "Approved", Rejected: "Rejected" }
+    has_one_attached :id_image
+    has_many :transactions, dependent: :destroy
 end
