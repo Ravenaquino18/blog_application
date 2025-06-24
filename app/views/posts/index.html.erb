@@ -21,27 +21,7 @@
       </tr>
     </thead>
     <tbody>
-      <% @posts.each do |post| %>
-        <tr>
-          <td><%= post.borrower_name %></td>
-          <td><%= number_to_peso(post.amount) %></td>
-          <td><%= post.interest_rate %></td>
-          <td><%= post.term_months %></td>
-          <td><%= post.start_date.present? ? post.start_date.strftime("%Y-%m-%d") : "" %></td>
-          <td><%= post.purpose %></td>
-          <td><%= post.status %></td>
-          <td>
-            <%= link_to 'Edit', edit_post_path(post), class: "btn btn-sm btn-warning" %>
-          </td>
-          <td>
-            <button class="btn btn-sm btn-success">Approve</button>
-          </td>
-          <td>
-            <button class="btn btn-sm btn-danger">Declined</button>
-
-          </td>
-        </tr>
-      <% end %>
+       <%= render partial: "posts/partials/loan_list" %>
     </tbody>
   </table>
   <%= link_to 'New Loan', new_post_path, class: "btn btn-primary" %>
