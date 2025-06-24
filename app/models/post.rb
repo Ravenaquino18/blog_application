@@ -1,13 +1,11 @@
-# app/models/post.rb
 class Post < ApplicationRecord
     validates :borrower_name, presence: true, length: { minimum: 5, maximum: 100 }
     validates :amount, presence: true, numericality: { greater_than_or_equal_to: 100 }
     validates :interest_rate, presence: true, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 500 }
-    
     validates :term_months, presence: true, numericality: { only_integer: true, greater_than: 0, less_than_or_equal_to: 500 }
     validates :start_date, presence: true
     validates :purpose, presence: true, length: { minimum: 10, maximum: 500 }
-    belongs_to :user
+    belongs_to :user # This line should be here, after all validations
 
     # Method to calculate the total interest earned for this specific loan
     def total_interest_earned
@@ -26,18 +24,16 @@ class Post < ApplicationRecord
         interest.round(2) # Round to two decimal places for currency display
     end
 
-    validate :total_payables_must_be_correct
+    validate :total_payables_must_be_correct # Keep this line if it's intended to be a custom validation
 
     def total_payables
-      amount.to_f + (amount.to_f * (interest_rate.to_f / 100))
-    end
-
-    private
-
-    def total_payables_must_be_correct
-      expected = amount.to_f + (amount.to_f * (interest_rate.to_f / 100))
-      if total_payables.to_f != expected
-        errors.add(:total_payables, "must be equal to amount + (amount * (interest_rate / 100))")
-      end
+        # This method's implementation should be correct as per your logic
+        # Example:
+        # amount.to_f + (amount.to_f * (interest_rate.to_f / 100)) # This looks like amount + simple interest.
+        # You might want to consider the term_months in this calculation too if it represents total repayable.
+        # Example:
+        # total_amount = self.amount.to_d + self.total_interest_earned
+        # total_amount.round(2)
+        amount.to_f + (amount.to_f * (interest_rate.to_f / 100))
     end
 end

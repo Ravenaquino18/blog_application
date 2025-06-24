@@ -36,7 +36,7 @@ class PostsController < ApplicationController
       end
     end
   end
-
+  
   # PATCH/PUT /posts/1 or /posts/1.json
   def update
     respond_to do |format|
@@ -49,6 +49,7 @@ class PostsController < ApplicationController
       end
     end
   end
+
 
   # DELETE /posts/1 or /posts/1.json
   def destroy
@@ -73,7 +74,11 @@ class PostsController < ApplicationController
         :interest_rate,
         :term_months,
         :start_date,
-        :purpose
+        :purpose,
+        :status
       )
     end
+    # ...existing code...
+
+   
 end
