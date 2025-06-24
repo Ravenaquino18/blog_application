@@ -1,3 +1,4 @@
+# app/models/post.rb
 class Post < ApplicationRecord
     validates :borrower_name, presence: true, length: { minimum: 5, maximum: 100 }
     validates :amount, presence: true, numericality: { greater_than_or_equal_to: 100 }
@@ -5,7 +6,7 @@ class Post < ApplicationRecord
     validates :term_months, presence: true, numericality: { only_integer: true, greater_than: 0, less_than_or_equal_to: 500 }
     validates :start_date, presence: true
     validates :purpose, presence: true, length: { minimum: 10, maximum: 500 }
-    belongs_to :user # This line should be here, after all validations
+    belongs_to :user
 
     # Method to calculate the total interest earned for this specific loan
     def total_interest_earned
@@ -24,16 +25,27 @@ class Post < ApplicationRecord
         interest.round(2) # Round to two decimal places for currency display
     end
 
-    validate :total_payables_must_be_correct # Keep this line if it's intended to be a custom validation
+    # Keep this line because you want a custom validation
+    validate :total_payables_must_be_correct
 
+    # REFINED: Method to calculate total payables (principal + total interest earned over the term)
     def total_payables
-        # This method's implementation should be correct as per your logic
-        # Example:
-        # amount.to_f + (amount.to_f * (interest_rate.to_f / 100)) # This looks like amount + simple interest.
-        # You might want to consider the term_months in this calculation too if it represents total repayable.
-        # Example:
-        # total_amount = self.amount.to_d + self.total_interest_earned
-        # total_amount.round(2)
-        amount.to_f + (amount.to_f * (interest_rate.to_f / 100))
+        (self.amount.to_d + self.total_interest_earned).round(2)
+    end
+
+    # NEW: Define the custom validation method referred to by 'validate :total_payables_must_be_correct'
+    def total_payables_must_be_correct
+        # Example validation logic:
+        # Add an error if the total payables is less than the original loan amount.
+        # This should theoretically always be true if interest_rate >= 0, but it demonstrates the structure.
+        if total_payables < self.amount
+            errors.add(:total_payables, "cannot be less than the original loan amount")
+        end
+
+        # You can add more specific or complex business rules here based on your requirements.
+        # For example, if there's a hard cap on total repayment:
+        # if total_payables > 1_000_000 # Example: if total payables cannot exceed 1,000,000 PHP
+        #   errors.add(:total_payables, "exceeds the maximum allowable total repayment")
+        # end
     end
 end
