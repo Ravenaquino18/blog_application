@@ -4,53 +4,95 @@
   </div>
 <% end %>
 
-<%= form_with(model: post) do |form| %>
+<%= form_with(model: post, data: { controller: "loan", turbo_frame: "loan_calculations" }) do |form| %>
   <% if post.errors.any? %>
     <div style="color: red">
       <h2><%= pluralize(post.errors.count, "error") %> prohibited this post from being saved:</h2>
       <ul>
-        <% post.errors.each do |error| %>
-          <li><%= error.full_message %></li>
+        <% post.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
         <% end %>
       </ul>
     </div>
   <% end %>
 
+  <!-- Name -->
   <div>
-    <%= form.label :borrower_name, "Borrower Name", style: "display: block" %>
+    <%= form.label :borrower_name, "Full Name", style: "display: block" %>
     <%= form.text_field :borrower_name %>
   </div>
+
+  <!-- Birth Date -->
   <div>
-    <%= form.label :amount, "Loan Amount", style: "display: block" %>
-    <%= form.number_field :amount, step: 100 %>
-  </div>
-  <div>
-    <%= form.label :interest_rate, "Interest Rate (%)", style: "display: block" %>
-    <%= form.number_field :interest_rate, step: 0.01 %>
-  </div>
-  <div>
-    <%= form.label :term_months, "Term (Months)", style: "display: block" %>
-    <%= form.number_field :term_months %>
-  </div>
-  <div>
-    <%= form.label :start_date, "Start Date", style: "display: block" %>
-    <%= form.date_field :start_date %>
-  </div>
-  <div>
-    <%= form.label :purpose, "Purpose", style: "display: block" %>
-    <%= form.text_area :purpose %>
-  </div>
-<div>
-  <%= form.label :status, "Status", style: "display: block" %>
-  <%= form.select :status, options_for_select([["Pending", "Pending"], ["Approved", "Approved"], ["Rejected", "Rejected"]], selected: post.status || "Pending") %>
-</div>
-  <div>
-    <%= form_with(model: @post) do |form| %>
-  <!-- form fields here -->
-  <%= form.submit "Save Loan", class: "btn btn-outline-success" %>
-<% end %>
+    <%= form.label :birthdate, "Date of Birth", style: "display: block" %>
+    <%= form.date_field :birthdate %>
   </div>
 
-  
-<% end %>
+  <!-- Nationality -->
+  <div>
+    <%= form.label :nationality, "Nationality", style: "display: block" %>
+    <%= form.select :nationality, options_for_select(["Filipino", "Foreigner"], selected: form.object.nationality) %>
+  </div>
+
+  <!-- Valid ID -->
+  <div>
+    <%= form.label :valid_id, "Select Valid ID", style: "display: block" %>
+    <%= form.select :valid_id, options_for_select([
+      "Passport",
+      "Driver's License",
+      "SSS",
+      "GSIS",
+      "PRC",
+      "UMID",
+      "PhilHealth",
+      "TIN",
+      "Voter's ID"
+    ], selected: form.object.valid_id) %>
+  </div>
+
+  <!-- SSS Number -->
+  <div>
+    <%= form.label :sss_number, "SSS Number (optional)", style: "display: block" %>
+    <%= form.text_field :sss_number %>
+  </div>
+
+  <!-- Loan Amount -->
+ <div>
+    <%= form.label :amount, "Loan Amount", style: "display: block" %>
+    <%= form.number_field :amount, step: 100, id: "loan_amount", name: "post[amount]", data: { action: "change->loan#recalculate input->loan#recalculate" } %>
+  </div>
  
+ <!-- Loan Term-->
+  <div>
+    <%= form.label :term_months, "Loan Term (Months)", style: "display: block" %>
+    <%= form.select :term_months, options_for_select([6, 12, 18, 24, 36, 48, 60], selected: form.object.term_months), {}, { id: "loan_term", name: "post[term_months]", data: { action: "change->loan#recalculate" } } %>
+  </div>
+
+
+ <!-- Calculations-->
+  <%= turbo_frame_tag "loan_calculations" do %>
+  <%= render "posts/partials/loan_calculations", amount: form.object.amount, term_months: form.object.term_months %>
+<% end %>
+
+    <!-- Repayment Schedule Date 
+  <div>
+    <%= form.label :birthdate, "Repayment Schedule", style: "display: block" %>
+    <%= form.date_field :birthdate %>
+  </div> -->
+    
+  <!--Mode of Payment-->
+  <div>
+    <%= form.label :payment_mode, "Method Payment", style: "display: block" %>
+    <%= form.select :payment_mode, options_for_select([
+      "E-WALLET",
+      "CREDIT CARD",
+      "CASH PAYMENT",
+    ], selected: form.object.valid_id) %>
+  </div>
+
+  <!-- Status-->
+  <%= form.hidden_field :status, value: "Pending" %>
+  <div>
+    <%= form.submit "Save Loan", class: "btn btn-outline-success" %>
+  </div>
+<% end %>

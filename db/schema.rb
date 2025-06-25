@@ -36,7 +36,18 @@ ActiveRecord::Schema[7.1].define(version: 2025_06_19_022627) do
     t.date "start_date"
     t.text "purpose"
     t.string "status"
+    t.date "birthdate"
+    t.string "nationality", limit: 30
+    t.string "valid_id", limit: 30
+    t.string "sss_number", limit: 30
+    t.string "payment_mode", limit: 20
     t.index ["user_id"], name: "index_posts_on_user_id"
+  end
+
+  create_table "repayment_schedules", id: :serial, force: :cascade do |t|
+    t.integer "post_id"
+    t.date "due_date"
+    t.decimal "amount", precision: 12, scale: 2
   end
 
   create_table "tickets", force: :cascade do |t|
@@ -61,4 +72,5 @@ ActiveRecord::Schema[7.1].define(version: 2025_06_19_022627) do
   end
 
   add_foreign_key "posts", "users"
+  add_foreign_key "repayment_schedules", "posts", name: "repayment_schedules_post_id_fkey"
 end

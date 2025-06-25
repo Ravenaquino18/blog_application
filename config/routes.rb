@@ -14,6 +14,9 @@ Rails.application.routes.draw do
   # Static pages
   get 'about', to: 'pages#about'
   get 'up', to: 'rails/health#show', as: :rails_health_check
+  
+  # config/routes.rb
+  get "posts/loan_calculation", to: "posts#loan_calculation"
 
   # Posts and other resources
   resources :posts
