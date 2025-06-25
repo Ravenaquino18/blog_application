@@ -1,0 +1,13 @@
+<h1>Process Loan</h1>
+
+<p><strong>Borrower:</strong> <%= @post.borrower_name %></p>
+<p><strong>Loan Amount:</strong> <%= number_to_currency(@post.amount, unit: "₱") %></p>
+
+<%= form_with model: [@post, @transaction], local: true do |f| %>
+  <div class="mb-3">
+    <%= f.label :amount %>
+    <%= f.number_field :amount, value: @post.amount, step: 0.01, class: "form-control" %>
+  </div>
+
+  <%= f.submit "Disburse", class: "btn btn-success" %>
+<% end %>

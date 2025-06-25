@@ -1,0 +1,10 @@
+<!-- filepath: app/views/posts/loanselect.html.erb -->
+
+<% if params[:loan_type].present? %>
+  <div class="alert alert-info mt-4 text-center">
+    <strong>Selected Loan Type:</strong>
+    <%= loan_type_label(params[:loan_type]) %>
+  </div>
+<% end %>
+
+<%= render partial: "posts/partials/loanselect", locals: { selected_loan_type: params[:loan_type] } %>

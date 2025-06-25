@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  get 'transactions/index'
+  get 'transactions/new'
+  get 'transactions/create'
   devise_for :users, path: '', path_names: {
     sign_in: 'login',
     sign_out: 'logout',
@@ -19,8 +22,16 @@ Rails.application.routes.draw do
   get "posts/loan_calculation", to: "posts#loan_calculation"
 
   # Posts and other resources
-  resources :posts
-  resources :credit_cards, except: [:show, :new]
+  resources :posts do
+    member do
+      patch :approve
+      patch :reject
+      post :validate
+    end
+  end
+  resources :credit_cards, except: [:show, :new, :loanselect]
+  get 'loanselect', to: 'posts#loanselect', as: 'loanselect_post'
+  resources :transactions, only: [:index, :new, :create]
 
   # API Routes (JSON)
   scope '/api', defaults: { format: :json } do
@@ -44,4 +55,8 @@ Rails.application.routes.draw do
 
   # Root path
   root 'pages#home'
+end
+
+def loanselect
+  # logic for loan selection page
 end

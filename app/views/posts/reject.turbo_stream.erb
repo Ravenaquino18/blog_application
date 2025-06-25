@@ -1,0 +1,6 @@
+<%= turbo_stream.replace dom_id(@post, :status) do %>
+  <span class="badge <%= @post.status == "Approved" ? "bg-success" : "bg-danger" %>">
+    <%= @post.status %>
+  </span>
+<% end %>
+

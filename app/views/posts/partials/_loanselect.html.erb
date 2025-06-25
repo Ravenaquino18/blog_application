@@ -1,0 +1,25 @@
+<%# app/views/posts/partials/_loanselect.html.erb %>
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+  <div class="card shadow-lg p-4" style="width: 28rem;">
+    <div class="text-center mb-4">
+      <i class="bi bi-cash-stack" style="font-size: 2.5rem; color: #0d6efd;"></i>
+      <h2 class="mt-2 mb-1">Choose Your Loan Type</h2>
+      <p class="text-muted mb-0">Select the type of loan you want to apply for.</p>
+    </div>
+
+    <%= form_with url: loanselect_post_path, method: :get, local: true do %>
+      <div class="mb-3">
+        <label for="loan_type" class="form-label">Loan Type</label>
+        <select id="loan_type" name="loan_type" class="form-select" required>
+          <option value="" disabled <%= 'selected' unless selected_loan_type.present? %>>-- Please choose an option --</option>
+          <option value="student" <%= 'selected' if selected_loan_type == 'student' %>>🎓 Student Loan</option>
+          <option value="personal" <%= 'selected' if selected_loan_type == 'personal' %>>💳 Personal Loan</option>
+          <option value="business" <%= 'selected' if selected_loan_type == 'business' %>>🏢 Business Loan</option>
+        </select>
+      </div>
+      <div class="d-grid">
+        <%= submit_tag "Continue", class: "btn btn-outline-primary" %>
+      </div>
+    <% end %>
+  </div>
+</div>
