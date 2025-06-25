@@ -10,7 +10,7 @@ class Post < ApplicationRecord
   #validates :purpose, presence: true, length: { minimum: 10, maximum: 500 } # Ensure 'purpose' validation is present
 
   # #YOUR PREFERRED ENUM DEFINITION (string-based values)
-  #enum status: { Pending: "Pending", Approved: "Approved", Rejected: "Rejected", Overdue: "Overdue", Completed: "Completed" }
+  enum status: { Pending: "Pending", Approved: "Approved", Rejected: "Rejected", Overdue: "Overdue", Completed: "Completed" }
 
   # Associations
   belongs_to :user, optional: true # Ensure optional: true is there
