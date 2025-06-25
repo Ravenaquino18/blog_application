@@ -1,29 +1,41 @@
 <p style="color: green"><%= notice %></p>
+
 <div class="container py-5">
   <div class="row justify-content-center">
     <div class="col-md-8 col-lg-6">
       <div class="card shadow-sm border-0">
         <div class="card-header bg-primary text-white">
-          <h2 class="mb-0"><%= @post.title %></h2>
+          <h2 class="mb-0">Loan for <%= @post.borrower_name %></h2>
         </div>
         <div class="card-body">
-          <p class="text-muted mb-2"><%= pluralize(@post.views || 0, "view") %></p>
-          <p><strong>Author:</strong> <%= @post.author if @post.respond_to?(:author) %></p>
+          <% if @post.has_attribute?(:views) %>
+            <p class="text-muted mb-2"><%= pluralize(@post.views || 0, "view") %></p>
+          <% end %>
+
+          <p><strong>Borrower Name:</strong> <%= @post.borrower_name %></p>
+          <p><strong>Amount:</strong> <%= number_to_peso(@post.amount) %></p>
+          <p><strong>Interest Rate:</strong> <%= @post.interest_rate %>%</p>
+          <p><strong>Term (Months):</strong> <%= @post.term_months %></p>
+          <p><strong>Start Date:</strong> <%= @post.start_date.present? ? @post.start_date.strftime("%Y-%m-%d") : "N/A" %></p>
+          <p><strong>Purpose:</strong> <%= @post.purpose %></p>
+
+          <p>
+            <strong>Total Interest Earned:</strong> <%= number_to_peso(@post.total_interest_earned) %>
+          </p>
+          <p>
+            <strong>Total Payables:</strong> <%= number_to_peso(@post.total_payables) %>
+          </p>
+
           <p><strong>Created at:</strong> <%= @post.created_at.strftime("%B %d, %Y %I:%M %p") %></p>
           <p><strong>Last updated:</strong> <%= @post.updated_at.strftime("%B %d, %Y %I:%M %p") %></p>
-          <p><%= simple_format(@post.body) %></p>
-          <% @post.attributes.each do |attr, value| %>
-            <% unless ["id", "title", "body", "views", "created_at", "updated_at", "author"].include?(attr) %>
-              <p><strong><%= attr.humanize %>:</strong> <%= value %></p>
-            <% end %>
-          <% end %>
+
         </div>
         <div class="card-footer d-flex justify-content-between align-items-center">
           <div>
-            <%= link_to "Edit this post", edit_post_path(@post), class: "btn btn-outline-success btn-sm me-2" %>
-            <%= link_to "Back to posts", posts_path, class: "btn btn-outline-secondary btn-sm" %>
+            <%= link_to "Edit this loan", edit_post_path(@post), class: "btn btn-outline-success btn-sm me-2" %>
+            <%= link_to "Back to loans", posts_path, class: "btn btn-outline-secondary btn-sm" %>
           </div>
-          <%= button_to "Destroy this post", @post, method: :delete, data: { turbo_confirm: "Are you sure?" }, class: "btn btn-outline-danger btn-sm" %>
+          <%= button_to "Destroy this loan", @post, method: :delete, data: { turbo_confirm: "Are you sure?" }, class: "btn btn-outline-danger btn-sm" %>
         </div>
       </div>
     </div>

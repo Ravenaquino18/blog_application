@@ -56,7 +56,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_06_24_070406) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "views", default: 0
-    t.bigint "user_id", null: false
+    t.integer "user_id", null: false
     t.string "borrower_name"
     t.decimal "amount"
     t.decimal "interest_rate"

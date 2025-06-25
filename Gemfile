@@ -68,3 +68,6 @@ gem 'devise'
 group :development, :test do
   gem 'rspec-rails'
 end
+
+gem 'chartkick'
+gem 'groupdate'

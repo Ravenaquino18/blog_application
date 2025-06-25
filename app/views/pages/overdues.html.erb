@@ -1,0 +1,45 @@
+<%# app/views/pages/overdues.html.erb %>
+<div class="container py-5">
+  <h1 class="mb-4">Overdue Loans</h1>
+
+  <% if @overdue_posts.any? %>
+    <table class="table table-hover table-striped shadow-sm">
+      <thead class="table-dark">
+        <tr>
+          <th>Borrower</th>
+          <th>Amount</th>
+          <th>Interest Rate</th>
+          <th>Term (Months)</th>
+          <th>Start Date</th>
+          <th>Expected End Date</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @overdue_posts.each do |post| %>
+          <tr>
+            <td><%= post.user&.name.presence || post.borrower_name %></td>
+            <td><%= number_to_currency(post.amount, unit: "₱", delimiter: ",", precision: 2) %></td>
+            <td><%= number_to_percentage(post.interest_rate, precision: 2) %></td>
+            <td><%= post.term_months %></td>
+            <td><%= post.start_date.strftime("%b %d, %Y") %></td>
+            <td><%= (post.start_date + post.term_months.months).strftime("%b %d, %Y") %></td>
+            <td>
+              <span class="badge bg-danger">
+                <%= post.status.capitalize %>
+              </span>
+            </td>
+            <td><%= link_to 'View', post_path(post), class: 'btn btn-sm btn-outline-primary' %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <div class="alert alert-success" role="alert">
+      No loans are currently overdue! Good job.
+    </div>
+  <% end %>
+
+  <%= link_to 'Back to Dashboard', root_path, class: 'btn btn-secondary mt-4' %>
+</div>
