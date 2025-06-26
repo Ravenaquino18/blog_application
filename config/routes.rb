@@ -27,7 +27,18 @@ Rails.application.routes.draw do
   # config/routes.rb (This line seems to be misplaced or redundant if you have posts resources already)
   get "posts/loan_calculation", to: "posts#loan_calculation" # Consider if this is needed or if it should be within resources :posts do ... end
 
-  # Posts and other resources
+  # config/routes.rb (This line seems to be misplaced or redundant if you have posts resources already)
+  get "posts/loan_calculation", to: "posts#loan_calculation" # Consider if this is needed or if it should be within resources :posts do ... end
+
+  # Transactions custom routes
+  # Optional shortcut route
+  get 'transelect', to: redirect('/transactions/transelect')
+
+# Transactions custom routes
+  get 'transactions/transelect', to: 'transactions#transelect', as: 'transelect_post'
+  get 'transactions/start', to: 'transactions#start_transaction', as: 'start_transaction'
+
+
   resources :posts do
     member do
       patch :approve
@@ -35,6 +46,9 @@ Rails.application.routes.draw do
       post :validate
     end
   end
+
+  resources :transactions, only: [:index, :new, :create]
+
   resources :credit_cards, except: [:show, :new, :loanselect]
   get 'loanselect', to: 'posts#loanselect', as: 'loanselect_post' # This `loanselect` action belongs in PostsController
   resources :transactions, only: [:index, :new, :create]
