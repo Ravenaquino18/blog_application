@@ -56,14 +56,14 @@ ActiveRecord::Schema[7.1].define(version: 2025_06_26_010123) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "views", default: 0
-    t.integer "user_id", null: false
+    t.bigint "user_id", null: false
     t.string "borrower_name"
     t.decimal "amount"
     t.decimal "interest_rate"
     t.integer "term_months"
     t.date "start_date"
     t.text "purpose"
-    t.string "status"
+    t.string "status", default: "pending"
     t.string "loan_type"
     t.date "birthdate"
     t.string "nationality", limit: 30
@@ -71,13 +71,6 @@ ActiveRecord::Schema[7.1].define(version: 2025_06_26_010123) do
     t.string "sss_number", limit: 30
     t.string "payment_mode", limit: 20
     t.index ["user_id"], name: "index_posts_on_user_id"
-  end
-
-  create_table "tickets", force: :cascade do |t|
-    t.string "title"
-    t.integer "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "transactions", force: :cascade do |t|
