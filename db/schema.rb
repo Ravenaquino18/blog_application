@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_06_24_072716) do
+ActiveRecord::Schema[7.1].define(version: 2025_06_26_010123) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -65,6 +65,11 @@ ActiveRecord::Schema[7.1].define(version: 2025_06_24_072716) do
     t.text "purpose"
     t.string "status"
     t.string "loan_type"
+    t.date "birthdate"
+    t.string "nationality", limit: 30
+    t.string "valid_id", limit: 30
+    t.string "sss_number", limit: 30
+    t.string "payment_mode", limit: 20
     t.index ["user_id"], name: "index_posts_on_user_id"
   end
 
