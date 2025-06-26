@@ -4,10 +4,10 @@ default: &default
   encoding: unicode
   pool: 5
   username: postgres
-  password: 123
-  host: localhost
+  password: 12345
+  host: localhost 
 
-development:
+development:  
   <<: *default
   database: blog_application
 
