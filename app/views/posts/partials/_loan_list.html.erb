@@ -8,7 +8,6 @@
       <td><%= post.term_months %></td>
       <td><%= post.start_date %></td>
       <td class="truncate" title="<%= post.purpose %>"><%= post.purpose %></td>
-
       <td>
         <%= turbo_frame_tag dom_id(post, :status) do %>
           <span class="badge <%= case post.status
@@ -20,7 +19,6 @@
           </span>
         <% end %>
       </td>
-
       <!-- Approve/Reject Buttons (if Pending) -->
       <td>
         <% if post.status == "Pending" && post.id_image.attached? %>
@@ -36,7 +34,6 @@
           <span class="text-muted small">Waiting for validation</span>
         <% end %>
       </td>
-
       <!-- ID Upload & Validate -->
       <td>
         <% if post.id_image.attached? %>
@@ -48,14 +45,16 @@
           <% end %>
         <% end %>
       </td>
-
       <!-- Links -->
-      <td class="text-nowrap">
-        <%= link_to 'Show', post_path(post), class: "btn btn-link btn-sm px-1" %>
-        <%= link_to 'Edit', edit_post_path(post), class: "btn btn-link btn-sm px-1" %>
-        <%= link_to 'Delete', post, method: :delete,
-            data: { confirm: 'Are you sure?' },
-            class: "btn btn-link btn-sm text-danger px-1" %>
+      <td>
+        <div class="btn-group" role="group">
+          <%= link_to 'Show', post_path(post), class: "btn btn-sm btn-outline-primary" %>
+          <%= link_to 'Edit', edit_post_path(post), class: "btn btn-sm btn-outline-secondary" %>
+          <%= link_to 'Delete', post_path(post),
+                      method: :delete,
+                      data: { confirm: "Are you sure?" },
+                      class: "btn btn-sm btn-outline-danger" %>
+        </div>
       </td>
     </tr>
   <% end %>

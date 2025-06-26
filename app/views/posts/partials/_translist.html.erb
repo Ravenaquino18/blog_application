@@ -1,39 +1,42 @@
-<!-- Transaction List Table -->
-<div class="card border-0 shadow-sm mb-4">
-  <div class="card-body">
-    <h4 class="fw-semibold mb-3">Loan Transactions</h4>
-    <div class="table-responsive">
-      <table class="table table-hover align-middle">
-        <thead class="table-light">
-          <tr>
-            <th>Borrower</th>
-            <th>Loan Type</th>
-            <th>Amount</th>
-            <th>Status</th>
-            <th>Processed At</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @transactions.each do |transaction| %>
-            <tr>
-              <td><%= transaction.post.borrower_name %></td>
-              <td><%= loan_type_label(transaction.post.loan_type) %></td>
-              <td><%= number_to_currency(transaction.amount || transaction.post.amount, unit: "₱") %></td>
-              <td>
-                <span class="badge 
-                  <%= case transaction.status
-                    when "completed" then "bg-success"
-                    when "pending" then "bg-warning text-dark"
-                    else "bg-secondary"
-                  end %>">
-                  <%= transaction.status.capitalize %>
-                </span>
-              </td>
-              <td><%= transaction.processed_at&.strftime("%B %d, %Y %I:%M %p") %></td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div>
+<table class="table table-hover align-middle">
+  <thead class="table-light">
+    <tr>
+      <th>Borrower</th>
+      <th>Loan Type</th>
+      <th>Amount</th>
+      <th>Status</th>
+      <th>Processed At</th>
+      <th>Actions</th> <!-- Added -->
+    </tr>
+  </thead>
+  <tbody>
+    <% @transactions.each do |transaction| %>
+      <tr>
+        <td><%= transaction.post.borrower_name %></td>
+        <td><%= loan_type_label(transaction.post.loan_type) %></td>
+        <td><%= number_to_currency(transaction.amount || transaction.post.amount, unit: "₱") %></td>
+        <td>
+          <span class="badge 
+            <%= case transaction.status
+              when "completed" then "bg-success"
+              when "pending" then "bg-warning text-dark"
+              else "bg-secondary"
+            end %>">
+            <%= transaction.status.capitalize %>
+          </span>
+        </td>
+        <td><%= transaction.processed_at&.strftime("%B %d, %Y %I:%M %p") %></td>
+        <td>
+          <div class="btn-group" role="group">
+            <%= link_to 'Show', post_path(transaction.post), class: "btn btn-sm btn-outline-primary" %>
+            <%= link_to 'Edit', edit_post_path(transaction.post), class: "btn btn-sm btn-outline-secondary" %>
+            <%= link_to 'Delete', post_path(transaction.post),
+                        method: :delete,
+                        data: { confirm: "Are you sure?" },
+                        class: "btn btn-sm btn-outline-danger" %>
+          </div>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
