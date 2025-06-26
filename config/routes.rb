@@ -23,9 +23,9 @@ Rails.application.routes.draw do
 
   # Health check
   get 'up', to: 'rails/health#show', as: :rails_health_check
-  
-  # config/routes.rb
-  get "posts/loan_calculation", to: "posts#loan_calculation"
+
+  # config/routes.rb (This line seems to be misplaced or redundant if you have posts resources already)
+  get "posts/loan_calculation", to: "posts#loan_calculation" # Consider if this is needed or if it should be within resources :posts do ... end
 
   # Posts and other resources
   resources :posts do
@@ -36,16 +36,16 @@ Rails.application.routes.draw do
     end
   end
   resources :credit_cards, except: [:show, :new, :loanselect]
-  get 'loanselect', to: 'posts#loanselect', as: 'loanselect_post'
+  get 'loanselect', to: 'posts#loanselect', as: 'loanselect_post' # This `loanselect` action belongs in PostsController
   resources :transactions, only: [:index, :new, :create]
 
-  # Calculator routes
-  get 'interest_calculator', to: 'pages#interest_calculator', as: :interest_calculator
-  post 'calculate_interest', to: 'pages#calculate_interest', as: :calculate_interest
+  # CORRECTED: Calculator routes now point to CalculatorController
+  get 'interest_calculator', to: 'calculator#interest', as: :interest_calculator
+  post 'calculate_interest', to: 'calculator#calculate_interest', as: :calculate_interest
 
-  # Penalty Calculator routes
-  get 'penalty_calculator', to: 'pages#penalty_calculator', as: :penalty_calculator
-  post 'calculate_penalty', to: 'pages#calculate_penalty', as: :calculate_penalty
+  # CORRECTED: Penalty Calculator routes now point to CalculatorController
+  get 'penalty_calculator', to: 'calculator#penalty', as: :penalty_calculator
+  post 'calculate_penalty', to: 'calculator#calculate_penalty', as: :calculate_penalty
 
   # Overdues route
   get 'overdues', to: 'pages#overdues', as: :overdues
@@ -74,6 +74,8 @@ Rails.application.routes.draw do
   root 'pages#home'
 end
 
-def loanselect
-  # logic for loan selection page
-end
+# NOTE: This `def loanselect` should NOT be in routes.rb.
+# It should be a method inside your PostsController.
+# def loanselect
+#   # logic for loan selection page
+# end

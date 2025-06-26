@@ -1,0 +1,63 @@
+<%# app/views/calculator/penalty.html.erb %>
+
+<div class="container py-5">
+  <h1 class="mb-4">Penalty Calculator</h1>
+
+  <% if flash[:alert] %>
+    <div class="alert alert-danger" role="alert">
+      <%= flash[:alert] %>
+    </div>
+  <% end %>
+
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <%= form_with url: calculate_penalty_path, method: :post, local: true, class: "needs-validation", novalidate: true do |form| %>
+        <div class="mb-3">
+          <%= form.label :amount_due, "Amount Due (₱)", class: "form-label" %>
+          <%# Use `params` to retain the value after submission %>
+          <%= form.number_field :amount_due, step: :any, min: 0, required: true, class: "form-control", placeholder: "e.g., 5000", value: params[:amount_due] %>
+          <div class="invalid-feedback">
+            Please enter the amount due.
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <%= form.label :daily_penalty_rate, "Daily Penalty Rate (%)", class: "form-label" %>
+          <%# Use `params` to retain the value after submission %>
+          <%= form.number_field :daily_penalty_rate, step: :any, min: 0, required: true, class: "form-control", placeholder: "e.g., 0.5 (for 0.5%)", value: params[:daily_penalty_rate] %>
+          <div class="invalid-feedback">
+            Please enter the daily penalty rate.
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <%= form.label :days_overdue, "Days Overdue", class: "form-label" %>
+          <%# Use `params` to retain the value after submission %>
+          <%= form.number_field :days_overdue, min: 0, required: true, class: "form-control", placeholder: "e.g., 30", value: params[:days_overdue] %>
+          <div class="invalid-feedback">
+            Please enter the number of days overdue.
+          </div>
+        </div>
+
+        <%= form.submit "Calculate Penalty", class: "btn btn-danger" %>
+      <% end %>
+    </div>
+  </div>
+
+  <%# This block will ONLY appear if @penalty_results is not nil %>
+  <% if @penalty_results %>
+    <div class="card shadow-sm mt-4">
+      <div class="card-header bg-danger text-white">
+        <h5 class="mb-0">Penalty Calculation Results</h5>
+      </div>
+      <div class="card-body">
+        <p class="fs-5">Total Penalty: <strong><%= number_to_currency(@penalty_results[:total_penalty], unit: "₱", delimiter: ",", precision: 2) %></strong></p>
+        <p class="fs-5">Total Amount Payable: <strong><%= number_to_currency(@penalty_results[:total_amount_with_penalty], unit: "₱", delimiter: ",", precision: 2) %></strong></p>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="mt-3">
+    <%= link_to "Back to Dashboard", root_path, class: "btn btn-secondary" %>
+  </div>
+</div>

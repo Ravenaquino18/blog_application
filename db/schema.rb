@@ -56,7 +56,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_06_24_072716) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "views", default: 0
-    t.bigint "user_id", null: false
+    t.integer "user_id", null: false
     t.string "borrower_name"
     t.decimal "amount"
     t.decimal "interest_rate"
@@ -64,19 +64,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_06_24_072716) do
     t.date "start_date"
     t.text "purpose"
     t.string "status"
-    t.date "birthdate"
-    t.string "nationality", limit: 30
-    t.string "valid_id", limit: 30
-    t.string "sss_number", limit: 30
-    t.string "payment_mode", limit: 20
     t.string "loan_type"
     t.index ["user_id"], name: "index_posts_on_user_id"
-  end
-
-  create_table "repayment_schedules", id: :serial, force: :cascade do |t|
-    t.integer "post_id"
-    t.date "due_date"
-    t.decimal "amount", precision: 12, scale: 2
   end
 
   create_table "tickets", force: :cascade do |t|
@@ -113,6 +102,5 @@ ActiveRecord::Schema[7.1].define(version: 2025_06_24_072716) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "posts", "users"
-  add_foreign_key "repayment_schedules", "posts", name: "repayment_schedules_post_id_fkey"
   add_foreign_key "transactions", "posts"
 end

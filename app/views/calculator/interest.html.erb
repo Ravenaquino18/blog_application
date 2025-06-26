@@ -1,13 +1,20 @@
-<%# app/views/pages/interest_calculator.html.erb %>
+<%# app/views/calculator/interest_calculator.html.erb %>
 <div class="container py-5">
   <h1 class="mb-4">Interest Calculator</h1>
+
+  <% if flash[:alert] %>
+    <div class="alert alert-danger" role="alert">
+      <%= flash[:alert] %>
+    </div>
+  <% end %>
 
   <div class="card shadow-sm mb-4">
     <div class="card-body">
       <%= form_with url: calculate_interest_path, method: :post, local: true, class: "needs-validation", novalidate: true do |form| %>
         <div class="mb-3">
           <%= form.label :principal, "Loan Principal (₱)", class: "form-label" %>
-          <%= form.number_field :principal, step: :any, min: 0, required: true, class: "form-control", placeholder: "e.g., 10000" %>
+          <%# Use `params` to retain the value after submission %>
+          <%= form.number_field :principal, step: :any, min: 0, required: true, class: "form-control", placeholder: "e.g., 10000", value: params[:principal] %>
           <div class="invalid-feedback">
             Please enter a principal amount.
           </div>
@@ -15,7 +22,8 @@
 
         <div class="mb-3">
           <%= form.label :rate, "Annual Interest Rate (%)", class: "form-label" %>
-          <%= form.number_field :rate, step: :any, min: 0, required: true, class: "form-control", placeholder: "e.g., 10 (for 10%)" %>
+          <%# Use `params` to retain the value after submission %>
+          <%= form.number_field :rate, step: :any, min: 0, required: true, class: "form-control", placeholder: "e.g., 10 (for 10%)", value: params[:rate] %>
           <div class="invalid-feedback">
             Please enter an annual interest rate.
           </div>
@@ -23,7 +31,8 @@
 
         <div class="mb-3">
           <%= form.label :term, "Loan Term (Months)", class: "form-label" %>
-          <%= form.number_field :term, min: 1, required: true, class: "form-control", placeholder: "e.g., 12" %>
+          <%# Use `params` to retain the value after submission %>
+          <%= form.number_field :term, min: 1, required: true, class: "form-control", placeholder: "e.g., 12", value: params[:term] %>
           <div class="invalid-feedback">
             Please enter a loan term in months.
           </div>
@@ -34,6 +43,7 @@
     </div>
   </div>
 
+  <%# The results section will now appear if the variables are set %>
   <% if @calculated_interest.present? %>
     <div class="card shadow-sm mt-4">
       <div class="card-header bg-success text-white">

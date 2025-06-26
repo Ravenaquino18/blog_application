@@ -1,4 +1,4 @@
-class AddLoanFieldsToPosts < ActiveRecord::Migration[8.0]
+class AddLoanFieldsToPosts < ActiveRecord::Migration[7.1]
   def change
     add_column :posts, :borrower_name, :string
     add_column :posts, :amount, :decimal
