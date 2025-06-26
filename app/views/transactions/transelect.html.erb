@@ -1,0 +1,19 @@
+<div class="container mt-5 d-flex justify-content-center">
+    <div class="card shadow" style="width: 30rem;">
+        <div class="card-header bg-success text-white">
+            <h4 class="mb-0">Start a New Transaction</h4>
+        </div>
+        <div class="card-body">
+            <%= form_with url: start_transaction_path, method: :get, local: true do |form| %>
+                <div class="mb-3">
+                    <%= form.label :post_id, "Select Approved Borrower", class: "form-label" %>
+                    <%= form.collection_select :post_id, Post.where(status: "Approved"), :id, :borrower_name,
+                        prompt: "Choose a borrower", class: "form-select" %>
+                </div>
+                <div class="d-grid">
+                    <%= form.submit "Start Transaction", class: "btn btn-success" %>
+                </div>
+            <% end %>
+        </div>
+    </div>
+</div>

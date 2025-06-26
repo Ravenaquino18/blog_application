@@ -1,0 +1,55 @@
+<!-- Header Summary -->
+<div class="d-flex justify-content-between align-items-center p-4 border rounded mb-4" style="border-radius: 16px;">
+  <div class="d-flex align-items-center gap-3">
+    <div class="d-flex justify-content-center align-items-center rounded-circle" style="width: 40px; height: 40px; background: #eaf3ec;">
+      <i class="bi bi-arrow-up fs-5 text-success"></i>
+    </div>
+    <div>
+      <p class="mb-0 fw-semibold"><%= @transaction.post&.borrower_name || "Borrower Name" %></p>
+      <p class="mb-0 text-muted small">Sent</p>
+    </div>
+  </div>
+  <div class="text-end">
+    <p class="mb-0 fw-semibold"><%= number_to_currency(@transaction.amount || 0, unit: "₱") %></p>
+    <p class="mb-0 text-muted small"><%= number_to_currency(@transaction.post&.amount || 0, unit: "₱") %></p>
+  </div>
+</div>
+
+<!-- Repeat This Transfer Box -->
+<div class="p-4 mb-4" style="background: #f5f7f5; border-radius: 18px;">
+  <h5 class="fw-semibold mb-4">Transaction Details</h5>
+
+  <% interest = 0 %>
+  <% if @transaction.post&.interest_rate.present? && @transaction.amount.present? %>
+    <% interest = @transaction.amount.to_f * (@transaction.post.interest_rate.to_f / 100) %>
+  <% end %>
+
+  <%= form_with model: @transaction, data: { turbo: true } do |f| %>
+    <div class="mb-3">
+      <label class="form-label text-muted mb-1">Interest Amount</label>
+      <div class="input-group mb-3">
+        <%= number_field_tag "peso_amount", interest.round(2), class: "form-control form-control-lg", readonly: true, style: "background: #fff;" %>
+        <span class="input-group-text bg-white">
+          <span class="me-1">🇵🇭</span> PHP
+        </span>
+      </div>
+    </div>
+
+    <div class="mb-4">
+      <label class="form-label text-muted mb-1">Recipient gets</label>
+      <div class="input-group">
+        <%= f.number_field :amount, step: 0.01, class: "form-control form-control-lg", placeholder: "Enter PHP amount", style: "background: #fff;" %>
+        <span class="input-group-text bg-white">
+          <span class="me-1">🇵🇭</span> PHP
+        </span>
+      </div>
+    </div>
+
+    <%= f.hidden_field :status, value: "completed" %>
+    <%= f.hidden_field :post_id, value: @transaction.post_id %>
+
+    <div class="d-grid">
+      <%= f.submit "Continue", class: "btn btn-success btn-lg rounded-pill", style: "background: #00e37d; border: none;" %>
+    </div>
+  <% end %>
+</div>

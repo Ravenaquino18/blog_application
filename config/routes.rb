@@ -1,7 +1,4 @@
 Rails.application.routes.draw do
-  get 'transactions/index'
-  get 'transactions/new'
-  get 'transactions/create'
   devise_for :users, path: '', path_names: {
     sign_in: 'login',
     sign_out: 'logout',
@@ -18,7 +15,15 @@ Rails.application.routes.draw do
   get 'about', to: 'pages#about'
   get 'up', to: 'rails/health#show', as: :rails_health_check
 
-  # Posts and other resources
+  # Transactions custom routes
+  # Optional shortcut route
+  get 'transelect', to: redirect('/transactions/transelect')
+
+# Transactions custom routes
+  get 'transactions/transelect', to: 'transactions#transelect', as: 'transelect_post'
+  get 'transactions/start', to: 'transactions#start_transaction', as: 'start_transaction'
+
+
   resources :posts do
     member do
       patch :approve
@@ -26,9 +31,11 @@ Rails.application.routes.draw do
       post :validate
     end
   end
+
+  resources :transactions, only: [:index, :new, :create]
+
   resources :credit_cards, except: [:show, :new, :loanselect]
   get 'loanselect', to: 'posts#loanselect', as: 'loanselect_post'
-  resources :transactions, only: [:index, :new, :create]
 
   # API Routes (JSON)
   scope '/api', defaults: { format: :json } do
@@ -52,8 +59,4 @@ Rails.application.routes.draw do
 
   # Root path
   root 'pages#home'
-end
-
-def loanselect
-  # logic for loan selection page
 end

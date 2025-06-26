@@ -21,30 +21,23 @@
           <ul class="dropdown-menu" aria-labelledby="postsDropdown">
             <li><%= link_to "All Loans", posts_path, class: "dropdown-item" %></li>
             <li><%= link_to "New Loan", loanselect_post_path, class: "dropdown-item" %></li>
-
-            <!-- ✅ Option 2: Transactions under Loans -->
-            <li><%= link_to "Transactions", transactions_path, class: "dropdown-item" %></li>
           </ul>
         </li>
 
-        <!-- ✅ Option 1: Top-level Transactions (use this OR the one above) -->
-        <li class="nav-item">
-          <%= link_to "Transactions", transactions_path, class: "nav-link" %>
+        <!-- Transactions Dropdown -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="transactionsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Transactions
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="transactionsDropdown">
+            <li><%= link_to "All Transactions", transactions_path, class: "dropdown-item" %></li>
+            <li><%= link_to "New Transaction", transelect_post_path, class: "dropdown-item" %></li>
+          </ul>
         </li>
 
         <!-- About -->
         <li class="nav-item">
           <%= link_to "About", about_path, class: "nav-link" %>
-        </li>
-
-        <!-- Cards Dropdown -->
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="supportDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Cards
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="supportDropdown">
-            <li><%= link_to "Credit Card", credit_cards_path, class: "dropdown-item" %></li>
-          </ul>
         </li>
       </ul>
 

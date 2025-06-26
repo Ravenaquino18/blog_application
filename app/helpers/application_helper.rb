@@ -10,4 +10,14 @@ module ApplicationHelper
       precision: precision   # Number of decimal places (default 2)
     )
   end
+
+  def loan_type_label(code)
+  {
+    'personal' => 'Personal Loan',
+    'business' => 'Business Loan',
+    'educational' => 'Educational Loan'
+  }[code] || code.titleize
+  end
+
+
 end

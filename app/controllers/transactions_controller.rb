@@ -1,33 +1,46 @@
 class TransactionsController < ApplicationController
-  before_action :set_post, only: [:new, :create]
-
   def index
-    @transactions = Transaction.includes(:post).order(processed_at: :desc)
+    @transactions = Transaction.includes(:post).order(created_at: :desc)
   end
 
   def new
-    @transaction = @post.transactions.new
+    @post = Post.find(params[:post_id])
+    @transaction = Transaction.new(post: @post, amount: @post.amount)
   end
 
   def create
-    @transaction = @post.transactions.build(transaction_params)
+    @transaction = Transaction.new(transaction_params)
+    @transaction.status = "completed"
     @transaction.processed_at = Time.current
-    @transaction.status = "Disbursed"
+
+    # Ensure post is loaded for interest and rendering fallback
+    @post = Post.find_by(id: @transaction.post_id)
+    @transaction.post = @post if @post
 
     if @transaction.save
-      redirect_to transactions_path, notice: "Transaction processed successfully."
+      redirect_to transactions_path, notice: 'Transaction completed successfully.'
     else
       render :new, status: :unprocessable_entity
     end
   end
 
-  private
-
-  def set_post
-    @post = Post.find(params[:post_id])
+  def transelect
+    @posts = Post.where(status: "Approved").order(created_at: :desc)
   end
 
+  def start_transaction
+    post_id = params[:post_id]
+
+    if post_id.present? && Post.exists?(post_id)
+      redirect_to new_transaction_path(post_id: post_id)
+    else
+      redirect_to transelect_post_path, alert: "Please select a valid borrower."
+    end
+  end
+
+  private
+
   def transaction_params
-    params.require(:transaction).permit(:amount)
+    params.require(:transaction).permit(:post_id, :amount)
   end
 end

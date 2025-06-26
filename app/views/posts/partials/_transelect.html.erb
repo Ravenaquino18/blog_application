@@ -1,0 +1,26 @@
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+  <div class="card shadow-lg border-0 p-4" style="max-width: 30rem; width: 100%; border-radius: 1rem;">
+    <div class="text-center mb-4">
+      <i class="bi bi-person-check" style="font-size: 3rem; color: #198754;"></i>
+      <h2 class="mt-3 mb-1 fw-semibold">Start a Transaction</h2>
+      <p class="text-muted">Select an approved borrower to proceed.</p>
+    </div>
+
+    <%= form_with url: start_transaction_path, method: :get, local: true do |form| %>
+      <div class="mb-4">
+        <label for="post_id" class="form-label fw-medium">Approved Borrowers</label>
+        <%= form.collection_select :post_id,
+              Post.where(status: "Approved"),
+              :id,
+              ->(p) { "#{p.borrower_name} (₱#{number_with_precision(p.amount, precision: 2)})" },
+              prompt: "-- Choose a borrower --",
+              class: "form-select form-select-lg",
+              required: true %>
+      </div>
+
+      <div class="d-grid">
+        <%= form.submit "Continue to Transaction", class: "btn btn-success btn-lg rounded-pill" %>
+      </div>
+    <% end %>
+  </div>
+</div>
