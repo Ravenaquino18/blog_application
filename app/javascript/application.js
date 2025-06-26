@@ -3,6 +3,7 @@ import "@hotwired/turbo-rails"
 import "controllers"
 import "chartkick"
 import "Chart.bundle"
+import "channels"
 
 // Add a Turbo listener to ensure charts are always redrawn on navigation.
 document.addEventListener("turbo:load", function() {
@@ -13,4 +14,4 @@ document.addEventListener("turbo:load", function() {
       }
     }
   }
-}); 
+});

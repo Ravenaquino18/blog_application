@@ -19,7 +19,7 @@ class Post < ApplicationRecord
   has_many :transactions, dependent: :destroy
 
   # Set default status for new posts.
-  #after_initialize :set_default_status, if: :new_record?
+  after_initialize :set_default_status, if: :new_record?
 
   # Method to calculate the total interest earned for this specific loan
   def total_interest_earned
@@ -74,4 +74,6 @@ class Post < ApplicationRecord
   def set_default_status
     self.status ||= 'Pending'
   end
+
+
 end
