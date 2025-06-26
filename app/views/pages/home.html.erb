@@ -243,7 +243,7 @@
   <%# Corrected Chart.js script tag placement and chart data queries %>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("turbo:load", function() {
       // Line Chart for Loans Created (Last 7 Days)
       var ctx = document.getElementById('postsChart').getContext('2d');
       var postsData = <%= raw((0..6).map { |i| Post.where(created_at: (Date.current - i.days).all_day).count }.reverse.to_json) %>;
