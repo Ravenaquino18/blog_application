@@ -1,13 +1,13 @@
 <% if flash[:loan_saved] %>
-  <div class="alert alert-warning" style="border: 1px solid #ffc107; background-color: #fff3cd; color: #856404; padding: 16px; border-radius: 6px; margin-bottom: 16px; box-shadow: 0 2px 6px rgba(255,193,7,0.1);">
+  <div class="alert alert-warning mb-4">
     <strong>Notice:</strong> <%= flash[:loan_saved] %>
   </div>
 <% end %>
 
 <%= form_with(model: post, data: { controller: "loan", turbo_frame: "loan_calculations" }) do |form| %>
   <% if post.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(post.errors.count, "error") %> prohibited this post from being saved:</h2>
+    <div class="alert alert-danger mb-4">
+      <h4><%= pluralize(post.errors.count, "error") %> prohibited this post from being saved:</h4>
       <ul>
         <% post.errors.full_messages.each do |msg| %>
           <li><%= msg %></li>
@@ -16,27 +16,23 @@
     </div>
   <% end %>
 
-  <!-- Name -->
-  <div>
-    <%= form.label :borrower_name, "Full Name", style: "display: block" %>
-    <%= form.text_field :borrower_name %>
+  <div class="mb-3">
+    <%= form.label :borrower_name, "Full Name", class: "form-label" %>
+     <%= form.text_field :borrower_name, class: "form-control", placeholder: "Enter full name" %>
+   </div>
+
+  <div class="mb-3">
+    <%= form.label :birthdate, "Date of Birth", class: "form-label" %>
+    <%= form.date_field :birthdate, class: "form-control" %>
   </div>
 
-  <!-- Birth Date -->
-  <div>
-    <%= form.label :birthdate, "Date of Birth", style: "display: block" %>
-    <%= form.date_field :birthdate %>
+  <div class="mb-3">
+    <%= form.label :nationality, "Nationality", class: "form-label" %>
+    <%= form.select :nationality, options_for_select(["Filipino", "Foreigner"], selected: form.object.nationality), {}, class: "form-select" %>
   </div>
 
-  <!-- Nationality -->
-  <div>
-    <%= form.label :nationality, "Nationality", style: "display: block" %>
-    <%= form.select :nationality, options_for_select(["Filipino", "Foreigner"], selected: form.object.nationality) %>
-  </div>
-
-  <!-- Valid ID -->
-  <div>
-    <%= form.label :valid_id, "Select Valid ID", style: "display: block" %>
+  <div class="mb-3">
+    <%= form.label :valid_id, "Select Valid ID", class: "form-label" %>
     <%= form.select :valid_id, options_for_select([
       "Passport",
       "Driver's License",
@@ -47,52 +43,42 @@
       "PhilHealth",
       "TIN",
       "Voter's ID"
-    ], selected: form.object.valid_id) %>
+    ], selected: form.object.valid_id), {}, class: "form-select" %>
   </div>
 
-  <!-- SSS Number -->
-  <div>
-    <%= form.label :sss_number, "SSS Number (optional)", style: "display: block" %>
-    <%= form.text_field :sss_number %>
+  <div class="mb-3">
+    <%= form.label :sss_number, class: "form-label" %>
+    <%= form.text_field :sss_number, class: "form-control", placeholder: "****-*****"%>
   </div>
 
-  <!-- Loan Amount -->
- <div>
-    <%= form.label :amount, "Loan Amount", style: "display: block" %>
-    <%= form.number_field :amount, step: 100, id: "loan_amount", name: "post[amount]", data: { action: "change->loan#recalculate input->loan#recalculate" } %>
-  </div>
- 
- <!-- Loan Term-->
-  <div>
-    <%= form.label :term_months, "Loan Term (Months)", style: "display: block" %>
-    <%= form.select :term_months, options_for_select([6, 12, 18, 24, 36, 48, 60], selected: form.object.term_months), {}, { id: "loan_term", name: "post[term_months]", data: { action: "change->loan#recalculate" } } %>
+  <div class="mb-3">
+    <%= form.label :amount, "Loan Amount", class: "form-label" %>
+    <%= form.number_field :amount, step: 100, id: "loan_amount", name: "post[amount]", data: { action: "change->loan#recalculate input->loan#recalculate" }, class: "form-control" , placeholder: "More than 12000" %>
   </div>
 
+  <div class="mb-3">
+    <%= form.label :term_months, "Loan Term (Months)", class: "form-label" %>
+    <%= form.select :term_months, options_for_select([6, 12, 18, 24, 36, 48, 60], selected: form.object.term_months), { id: "loan_term", name: "post[term_months]", data: { action: "change->loan#recalculate" }, class: "form-select" } %>
+  </div>
+  
+  <div class="mb-3">
+    <%= turbo_frame_tag "loan_calculations" do %>
+      <%= render "posts/partials/loan_calculations", amount: form.object.amount, term_months: form.object.term_months %>
+    <% end %>
+  </div>
 
- <!-- Calculations-->
-  <%= turbo_frame_tag "loan_calculations" do %>
-  <%= render "posts/partials/loan_calculations", amount: form.object.amount, term_months: form.object.term_months %>
-<% end %>
-
-    <!-- Repayment Schedule Date 
-  <div>
-    <%= form.label :birthdate, "Repayment Schedule", style: "display: block" %>
-    <%= form.date_field :birthdate %>
-  </div> -->
-    
-  <!--Mode of Payment-->
-  <div>
-    <%= form.label :payment_mode, "Method Payment", style: "display: block" %>
+  <div class="mb-3">
+    <%= form.label :payment_mode, "Method Payment", class: "form-label" %>
     <%= form.select :payment_mode, options_for_select([
       "E-WALLET",
       "CREDIT CARD",
       "CASH PAYMENT",
-    ], selected: form.object.valid_id) %>
+    ], selected: form.object.valid_id), {}, class: "form-select" %>
   </div>
 
-  <!-- Status-->
   <%= form.hidden_field :status, value: "Pending" %>
-  <div>
-    <%= form.submit "Save Loan", class: "btn btn-outline-success" %>
+
+  <div class="mb-3">
+    <%= form.submit "Save Loan", class: "btn btn-outline-success w-100" %>
   </div>
 <% end %>

@@ -3,11 +3,14 @@ import "@hotwired/turbo-rails"
 import "controllers"
 import "chartkick"
 import "Chart.bundle"
-import "chartkick/chart.js" 
+
 // Add a Turbo listener to ensure charts are always redrawn on navigation.
 document.addEventListener("turbo:load", function() {
-  // We check if Chartkick is defined to avoid errors on pages without charts.
-  if (typeof Chartkick !== 'undefined') {
-    Chartkick.init();
+  if (typeof Chartkick !== 'undefined' && Chartkick.charts) {
+    for (const id in Chartkick.charts) {
+      if (Chartkick.charts[id].redraw) {
+        Chartkick.charts[id].redraw();
+      }
+    }
   }
-});
+}); 
