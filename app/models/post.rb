@@ -1,15 +1,15 @@
 # app/models/post.rb
 
 class Post < ApplicationRecord
-  ##TB Edited: Uncomment the validations if needed and comment other if needed
-    #validates :borrower_name, presence: true, length: { minimum: 5, maximum: 100 }
+  # RECOMMENDED: Uncomment these validations to ensure data integrity.
+  #validates :borrower_name, presence: true, length: { minimum: 5, maximum: 100 }
   #validates :amount, presence: true, numericality: { greater_than_or_equal_to: 100 }
   #validates :interest_rate, presence: true, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 500 }
   #validates :term_months, presence: true, numericality: { only_integer: true, greater_than: 0, less_than_or_equal_to: 500 }
   #validates :start_date, presence: true
   #validates :purpose, presence: true, length: { minimum: 10, maximum: 500 } # Ensure 'purpose' validation is present
 
-  # #YOUR PREFERRED ENUM DEFINITION (string-based values)
+  # YOUR PREFERRED ENUM DEFINITION (string-based values)
   enum status: { Pending: "Pending", Approved: "Approved", Rejected: "Rejected", Overdue: "Overdue", Completed: "Completed" }
 
   # Associations
@@ -18,7 +18,7 @@ class Post < ApplicationRecord
   has_many :transactions, dependent: :destroy
 
   # Set default status for new posts.
-  #after_initialize :set_default_status, if: :new_record?
+  after_initialize :set_default_status, if: :new_record?
 
   # Method to calculate the total interest earned for this specific loan
   def total_interest_earned
@@ -73,4 +73,6 @@ class Post < ApplicationRecord
   def set_default_status
     self.status ||= 'Pending'
   end
+
+
 end

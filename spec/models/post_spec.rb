@@ -1,18 +1,61 @@
 require 'rails_helper'
 
 RSpec.describe Post, type: :model do
-  it "is valid with valid attributes" do
-    post = Post.new(
-      title: "Sample",
-      body: "Content",
-      amount: 1000.0,
-      borrower_name: "John Doe",
-      interest_rate: 5.5,
-      term_months: 12,
-      start_date: Date.today,
-      purpose: "Start a small business"
-    )
-    expect(post).to be_valid
+  describe "validations" do
+    it "is valid with valid attributes" do
+      user = User.create!(email: "howel@example.com", 
+                          password: "123456")
+
+      post = Post.new(borrower_name: "John Doe", 
+                      amount: 69000, 
+                      interest_rate: 10, 
+                      term_months: 12,
+                      start_date: Date.today,
+                      user: user
+                      )
+
+      expect(post).to be_valid
+    end
+
+    it "is invalid without a borrower_name" do
+      post = Post.new(
+        borrower_name: nil,
+        amount: 10000.0,
+        interest_rate: 5.0,
+        loan_type: "personal"
+      )
+      expect(post).to_not be_valid
+    end 
+
+    it "is invalid with a negative amount" do
+      post = Post.new(
+        borrower_name: "Jane Doe",
+        amount: -5000.0,
+        interest_rate: 5.0,
+        loan_type: "personal"
+      )
+      expect(post).to_not be_valid
+    end
+
+    it "is invalid with a non-numeric interest_rate" do
+      post = Post.new(
+        borrower_name: "Jane Doe",
+        amount: 5000.0,
+        interest_rate: "five",
+        loan_type: "personal"
+      )
+      expect(post).to_not be_valid
+    end
+  end
+
+  describe "loan" do
+    it "defines the correct loan types" do
+      expected_types = {
+        "personal" => "personal",
+        "business" => "business",
+        "student" => "student"
+      }
+      expect(Post.loan_types).to eq(expected_types)
+    end
   end
 end
-

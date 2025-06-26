@@ -173,7 +173,9 @@
         </div>
       </div>
 
-    </div> <div class="col-lg-4">
+    </div>
+
+    <div class="col-lg-4">
 
       <div class="card border-0 shadow-sm mb-4">
         <div class="card-header bg-primary text-white">
@@ -233,34 +235,19 @@
         </div>
       </div>
 
-      <div class="card border-0 shadow-sm mb-4">
-        <div class="card-header bg-light">
-          <h5 class="mb-0">My Notifications</h5>
-        </div>
-        <div class="card-body">
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item">Finish Loan Application <span class="badge bg-warning text-dark float-end">Aug 6</span></li>
-            <li class="list-group-item">Upload Bank Statement <span class="badge bg-info text-dark float-end">Aug 5</span></li>
-            <li class="list-group-item">Loan #123 Approved! <span class="badge bg-success float-end">Today</span></li>
-          </ul>
-        </div>
-      </div>
+    </div>
 
-    </div> </div> <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    </div>
+  </div>
+  
+  <%# Corrected Chart.js script tag placement and chart data queries %>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
     document.addEventListener("DOMContentLoaded", function() {
-      // Line Chart
+      // Line Chart for Loans Created (Last 7 Days)
       var ctx = document.getElementById('postsChart').getContext('2d');
-      var postsData = <%= raw(
-        (0..6).map { |i|
-          Post.where(created_at: (Date.today - i).all_day).count
-        }.reverse.to_json
-      ) %>;
-      var postsLabels = <%= raw(
-        (0..6).map { |i|
-          (Date.today - i).strftime("%a")
-        }.reverse.to_json
-      ) %>;
+      var postsData = <%= raw((0..6).map { |i| Post.where(created_at: (Date.current - i.days).all_day).count }.reverse.to_json) %>;
+      var postsLabels = <%= raw((0..6).map { |i| (Date.current - i.days).strftime("%a") }.reverse.to_json) %>;
       new Chart(ctx, {
         type: 'line',
         data: {
@@ -291,12 +278,12 @@
       var ctxPie = document.getElementById('monthlyLoansPie').getContext('2d');
       var monthlyData = <%= raw(
         (0..11).map { |i|
-          Post.where(created_at: (Date.today.beginning_of_month - i.months)..(Date.today.end_of_month - i.months)).sum(:amount)
+          Post.where(created_at: (Date.current - i.months).all_month).sum(:amount)
         }.reverse.to_json
       ) %>;
       var monthlyLabels = <%= raw(
         (0..11).map { |i|
-          (Date.today - i.months).strftime("%b %Y")
+          (Date.current - i.months).strftime("%b %Y")
         }.reverse.to_json
       ) %>;
       new Chart(ctxPie, {
@@ -325,12 +312,12 @@
       var ctxYearly = document.getElementById('yearlyLoansPie').getContext('2d');
       var yearlyData = <%= raw(
         (0..4).map { |i|
-          Post.where(created_at: (Date.today.beginning_of_year - i.years)..(Date.today.end_of_year - i.years)).sum(:amount)
+          Post.where(created_at: (Date.current - i.years).all_year).sum(:amount)
         }.reverse.to_json
       ) %>;
       var yearlyLabels = <%= raw(
         (0..4).map { |i|
-          (Date.today - i.years).strftime("%Y")
+          (Date.current - i.years).strftime("%Y")
         }.reverse.to_json
       ) %>;
       new Chart(ctxYearly, {

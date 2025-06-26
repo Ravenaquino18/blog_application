@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <%= javascript_importmap_tags 'application' %>
+    <%# Your importmap tags %>
     <%= javascript_importmap_tags %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <title><%= content_for(:title) || "Blog Demo" %></title>
@@ -21,6 +21,10 @@
     <link rel="apple-touch-icon" href="/icon.png">
 
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+
+    <% if user_signed_in? %>
+      <%= turbo_stream_from "notifications:#{current_user.id}" %>
+    <% end %>
     
   </head>
 
@@ -30,10 +34,13 @@
       <%= render "layouts/alerts" %>
     </header>
 
+    <%# IDEAL PLACEMENT: Right after the header or alerts %>
+   
+
     <main>
       <%= yield %>
     </main>
-
+    
     <script>
       document.addEventListener("turbo:load", () => {
         document.querySelectorAll("[id^='status-badge-']").forEach((el) => {
