@@ -5,6 +5,8 @@ class Post < ApplicationRecord
     validates :term_months, presence: true, numericality: { only_integer: true, greater_than: 0, less_than_or_equal_to: 500 }
     validates :start_date, presence: true
     belongs_to :user
+    enum loan_type: { personal: 0, business: 1, student: 2 }
+    validates :loan_type, presence: true
     enum status: { Pending: "Pending", Approved: "Approved", Rejected: "Rejected" }
     has_one_attached :id_image
     has_many :transactions, dependent: :destroy
