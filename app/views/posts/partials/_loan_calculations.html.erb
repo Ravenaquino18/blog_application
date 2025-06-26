@@ -1,0 +1,39 @@
+<turbo-frame id="loan_calculations">
+<% amount = (amount || 0).to_f %>
+<% term = (term_months || 0).to_i %>
+<%
+  interest_rates = {
+    6 => 0.0139,
+    12 => 0.0125,
+    18 => 0.0125,
+    24 => 0.0120,
+    36 => 0.0115,
+    48 => 0.0110,
+    60 => 0.0108
+  }
+  interest_rate = interest_rates[term] || 0.0125 # default if term not found
+  interest = amount * interest_rate
+  total = amount + (interest * term)
+%>
+
+<div class="card my-3 shadow-sm" style="max-width: 400px;">
+  <div class="card-header bg-primary text-white">
+    Loan Calculation Summary
+  </div>
+  <div class="card-body">
+    <div class="mb-3">
+      <label class="form-label fw-bold">Monthly Interest Rate:</label>
+      <span class="badge bg-secondary"><%= (interest_rate * 100).round(2) %>%</span>
+    </div>
+    <div class="mb-3">
+      <label class="form-label fw-bold">Interest Amount:</label>
+      <span class="badge bg-info text-dark"><%= number_with_precision(interest, precision: 2) %></span>
+      <span class="text-muted">a month</span>
+    </div>
+    <div>
+      <label class="form-label fw-bold">Total Payable:</label>
+      <span class="badge bg-success"><%= number_with_precision(total, precision: 2) %></span>
+    </div>
+  </div>
+</div>
+</turbo-frame>

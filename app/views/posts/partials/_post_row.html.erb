@@ -1,0 +1,58 @@
+<tr id="<%= dom_id(post) %>">
+  <td><%= post.borrower_name %></td>
+  <td><%= loan_type_label(post.loan_type) %></td>
+  <td><%= number_to_peso(post.amount) %></td>
+  <td><%= post.interest_rate %></td>
+  <td><%= post.term_months %></td>
+  <td><%= post.start_date %></td>
+  <td><%= post.purpose %></td>
+  <td>
+    <%= turbo_frame_tag dom_id(post, :status) do %>
+      <span class="badge <%= case post.status
+        when "Approved" then "bg-success"
+        when "Rejected" then "bg-danger"
+        else "bg-secondary"
+      end %>">
+        <%= post.status %>
+      </span>
+    <% end %>
+  </td>
+  <td>
+    <% if post.status == "Pending" && post.id_image.attached? %>
+      <div class="d-flex gap-1">
+        <%= button_to "Approve", approve_post_path(post), method: :patch,
+            form: { data: { turbo_stream: true } },
+            class: "btn btn-sm btn-success" %>
+        <%= button_to "Reject", reject_post_path(post), method: :patch,
+            form: { data: { turbo_stream: true } },
+            class: "btn btn-sm btn-danger" %>
+      </div>
+    <% elsif post.status == "Pending" && !post.id_image.attached? %>
+      <span class="text-muted small">Waiting for validation</span>
+    <% end %>
+  </td>
+  <td>
+    <% if post.id_image.attached? %>
+      <div class="d-flex align-items-center gap-2">
+        <%= link_to "Show File", url_for(post.id_image), target: "_blank", class: "btn btn-outline-primary btn-sm" %>
+      </div>
+    <% else %>
+      <%= form_with url: validate_post_path(post), html: { multipart: true, class: "d-flex align-items-center gap-2" }, local: true do |f| %>
+        <%= f.file_field :id_image, accept: "image/*", class: "form-control form-control-sm w-auto" %>
+        <%= f.submit "Validate", class: "btn btn-sm btn-success" %>
+      <% end %>
+    <% end %>
+  </td>
+  <td>
+    <% if post.status == "Approved" %>
+      <%= link_to "Process", new_post_transaction_path(post), class: "btn btn-warning btn-sm" %>
+    <% end %>
+  </td>
+  <td class="text-nowrap">
+    <%= link_to 'Show', post_path(post), class: "btn btn-link btn-sm px-1" %>
+    <%= link_to 'Edit', edit_post_path(post), class: "btn btn-link btn-sm px-1" %>
+    <%= link_to 'Delete', post, method: :delete,
+        data: { confirm: 'Are you sure?' },
+        class: "btn btn-link btn-sm text-danger px-1" %>
+  </td>
+</tr>

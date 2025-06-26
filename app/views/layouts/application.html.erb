@@ -1,25 +1,24 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <%= javascript_include_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags 'application' %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <title><%= content_for(:title) || "Blog Demo" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-    <%= yield :head %>
 
-    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
-    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
+    <%= yield :head %>
 
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
 
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     
   </head>
@@ -29,8 +28,17 @@
       <%= render "layouts/navbar" %>
       <%= render "layouts/alerts" %>
     </header>
+
     <main>
       <%= yield %>
     </main>
+
+    <script>
+      document.addEventListener("turbo:load", () => {
+        document.querySelectorAll("[id^='status-badge-']").forEach((el) => {
+          el.remove(); // Instantly remove the badge
+        });
+      });
+    </script>
   </body>
 </html>

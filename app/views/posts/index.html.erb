@@ -8,10 +8,11 @@
     <thead>
       <tr>
         <th>Borrower Name</th>
+        <th>Loan Type</th> <!-- 🔹 New column -->
         <th>Amount</th>
         <th>Interest Rate (%)</th>
         <th>Term (Months)</th>
-        <th>Start Date</th>
+        <th>Posted Date</th>
         <th>Purpose</th>
         <th>Status</th>
         <th></th>
@@ -21,8 +22,8 @@
       </tr>
     </thead>
     <tbody>
-       <%= render partial: "posts/partials/loan_list" %>
+      <%= render partial: "posts/partials/loan_list" %>
     </tbody>
   </table>
-  <%= link_to 'New Loan', new_post_path, class: "btn btn-primary" %>
+  <%= link_to 'New Loan', loanselect_post_path, class: "btn btn-primary" %>
 </div>
