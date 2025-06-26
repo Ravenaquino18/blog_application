@@ -10,4 +10,4 @@ document.addEventListener("turbo:load", function() {
   if (typeof Chartkick !== 'undefined') {
     Chartkick.init();
   }
-});
+});import "channels"
